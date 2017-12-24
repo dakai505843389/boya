@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.1.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+
+    <!-- 配置自动扫描，不扫描Controller注解的类 -->
+    <context:component-scan base-package="com.hd.clc.boya">
+        <context:exclude-filter  type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 配置使用cglib代理 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 配置jdbc配置文件路径 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 配置dbcp数据源 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <!-- 数据库驱动 -->
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <!-- 数据库地址 -->
+        <property name="url" value="${jdbc.url}"/>
+        <!-- 数据库用户名 -->
+        <property name="username" value="${jdbc.userName}"/>
+        <!-- 密码 -->
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 最大连接数 -->
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <!-- 最大空闲数 -->
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <!-- 最长等待时间 -->
+        <property name="maxWait" value="${jdbc.maxWait}"/>
+        <!-- 验证查询 -->
+        <property name="validationQuery" value="${jdbc.validationQuery}"/>
+        <!-- 连接有效验证 -->
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}"/>
+        <!-- 空闲连接回收器进行验证 -->
+        <property name="testWhileIdle" value="${jdbc.testWhileIdel}"/>
+    </bean>
+
+    <!-- 配置myBatis sqlSessionTemplateFactoryBean -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="typeAliasesPackage" value="com.hd.clc.boya.db.entity"/>
+        <property name="mapperLocations" >
+            <list>
+                <value>classpath*:com/hd/clc/boya/db/mapper/*.xml</value>
+            </list>
+        </property>
+        <!-- mybatis分页插件配置 -->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            offsetAsPageNum=true
+                            pageSizeZero=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hd.clc.boya.db.impl" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+    <!-- 配置sqlSessionTemplate -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 事务配置 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置使用注解来配置事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <import resource="applicationContext.xml"/>
+    <!--<import resource="interceptor.xml"/>-->
+
+
+</beans>
