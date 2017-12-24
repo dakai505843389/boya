@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hd.clc.boya.db.impl.UserMapper">
+
+    <sql id="Base_Column">
+        id, openid, unionid, userName, imagePath, tel, addTime, updateTime, lastLoginTime, userType
+    </sql>
+
+    <select id="queryById" resultType="com.hd.clc.boya.db.entity.User">
+        SELECT <include refid="Base_Column" />
+        FROM User
+        WHERE id = #{id}
+    </select>
+
+</mapper>
