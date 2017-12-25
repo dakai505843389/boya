@@ -15,7 +15,7 @@ public class TestController {
     @ResponseBody
     public Result test(@RequestParam String name, HttpServletRequest request){
         //String newName = name + new Date(System.currentTimeMillis());
-        String res = "ceshi测试";
+        String res = "ceshi测试 ";
         return new Result(1, res);
     }
 
