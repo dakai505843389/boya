@@ -24,4 +24,8 @@ public class TestController {
     public Result hello(){
         return new Result(1, "hello");
     }
+
+    public Result test2(){
+        return null;
+    }
 }
