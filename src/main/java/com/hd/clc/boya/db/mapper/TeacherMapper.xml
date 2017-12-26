@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hd.clc.boya.db.impl.TeacherMapper">
+
+    <sql id="Base_Column">
+         id, userId, description, score, fansNum, teacherType, addTime, updateTime
+    </sql>
+
+    <select id="queryById" resultType="com.hd.clc.boya.db.entity.Teacher">
+        SELECT <include refid="Base_Column" />
+        FROM Teacher
+        WHERE id = #{id}
+        AND isDeleted = 0
+    </select>
+    
+    <update id="deleteById">
+        UPDATE TABLE SET isDeleted = 1
+        WHERE id = id
+    </update>
+
+</mapper>
