@@ -20,6 +20,12 @@ public class UserController {
     @Autowired
     private UserServiceImpl userService;
 
+    /**
+     * 登录接口
+     * @param code
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestParam String code, HttpServletRequest request){
         Map<String, Object> data = new HashMap<>();
@@ -27,6 +33,13 @@ public class UserController {
         data.put("userCode", userCode);
         return new ResultDetial<>(data);
     }
+
+    @RequestMapping(value = "/getPersonlInformation")
+    public Result getPersonlInformation(@RequestParam Integer userId){
+        return null;
+    }
+
+
 
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public Result test(@RequestParam Integer id){
