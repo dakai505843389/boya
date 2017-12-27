@@ -1,6 +1,6 @@
 package com.hd.clc.boya.controller;
 
-import com.hd.clc.boya.service.impl.PaymentServiceImpl;
+import com.hd.clc.boya.service.IPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PaymentController {
     @Autowired
-    private PaymentServiceImpl paymentService;
+    private IPaymentService paymentService;
 }

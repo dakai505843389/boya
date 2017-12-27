@@ -1,7 +1,8 @@
 package com.hd.clc.boya.service.impl;
 
-import org.springframework.stereotype.Repository;
+import com.hd.clc.boya.service.IClassService;
+import org.springframework.stereotype.Service;
 
-@Repository
-public interface ClassServiceImpl {
+@Service
+public class ClassServiceImpl implements IClassService {
 }
