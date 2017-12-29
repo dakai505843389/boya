@@ -18,12 +18,18 @@
         WHERE id = #{id}
     </update>
 
-    <select id="queryByUserId">
+    <select id="queryByUserId" resultType="com.hd.clc.boya.db.entity.Teacher">
         SELECT <include refid="Base_Column" />
         FROM Teacher
         WHERE userId = #{userId}
         AND isDeleted = 0
     </select>
+
+    <insert id="addNewTeacher" parameterType="com.hd.clc.boya.db.entity.Teacher" useGeneratedKeys="true" keyProperty="id" >
+        INSERT INTO Teacher
+        (userId, description, teacherType, addTime)
+        VALUES (#{userId}, #{description}, #{teacherType}, #{addTime})
+    </insert>
 
 
 </mapper>
