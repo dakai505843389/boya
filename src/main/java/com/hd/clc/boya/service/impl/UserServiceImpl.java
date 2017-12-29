@@ -100,6 +100,7 @@ public class UserServiceImpl implements IUserService {
         if (userMapper.updateUserInformation(user) < 1){
             return new ResultDetial(-1, "更新用户信息失败！", data);
         } else {
+            data.put("user", user);
             msg = "更新成功！";
         }
         return new ResultDetial(msg, data);
@@ -111,7 +112,14 @@ public class UserServiceImpl implements IUserService {
         String msg = null;
         Teacher teacher = teacherMapper.queryByUserId(userId);
         if (teacher != null){
-
+            Integer status = teacher.getStatus();
+            if (status == 0){
+                msg = "教师资格已申请，正在审核中！";
+            } else if (status == 1){
+                msg = "用户已是教师，无需再次申请！";
+            } else if (status ==2 ){
+                msg = "教师资格被暂停，请联系相关人员！";
+            }
         } else {
 
         }
