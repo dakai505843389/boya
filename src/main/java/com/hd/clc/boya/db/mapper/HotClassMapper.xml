@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.HotClassMapper">
 
     <sql id="Base_Column">
-        id, classId, sortNum, isTop, topTime, addTime, updateTime, isDeleted
+        id, classId, sortNum, isTop, topTime, addTime, updateTime, status
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.HotClass">
@@ -17,5 +17,13 @@
         UPDATE Hot_Class SET isDeleted = 1
         WHERE id = #{id}
     </update>
+
+    <select id="query" resultType="com.hd.clc.boya.db.entity.HotClass">
+        SELECT <include refid="Base_Column" />
+        FROM Hot_Class
+        WHERE isDeleted = 0
+        AND status = 0
+        ORDER BY isTop DESC , sortNum DESC
+    </select>
 
 </mapper>

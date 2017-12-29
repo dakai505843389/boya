@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.TeacherEvaluationMapper">
 
     <sql id="Base_Column">
-        id, mapId, belongClassId, belongTeacherId, evaluationType, evalueationWord, evalueationScore, addTime, updateTime,
+        id, mapId, belongClassId, belongTeacherId, evaluationType, evalueationWord, evalueationScore, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.TeacherEvaluation">

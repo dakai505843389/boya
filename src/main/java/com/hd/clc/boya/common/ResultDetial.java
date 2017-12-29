@@ -9,6 +9,11 @@ public class ResultDetial<T> extends Result {
         this.data = data;
     }
 
+    public ResultDetial(String msg, T data){
+        super(0, msg);
+        this.data = data;
+    }
+
     public ResultDetial(int code, String msg, T data){
         super(code, msg);
         this.data = data;

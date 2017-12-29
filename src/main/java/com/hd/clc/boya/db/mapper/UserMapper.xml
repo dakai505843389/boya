@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.UserMapper">
 
     <sql id="Base_Column">
-        id, openid, unionid, userName, imagePath, tel, addTime, updateTime, lastLoginTime, userType
+        id, openid, unionid, userName, imagePath, sex, tel, addTime, updateTime, loginTimes, lastLoginTime, userType
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.User">
@@ -11,5 +11,55 @@
         FROM User
         WHERE id = #{id}
     </select>
+
+    <select id="queryByOpenid" resultType="com.hd.clc.boya.db.entity.User">
+        SELECT <include refid="Base_Column" />
+        FROM User
+        WHERE openid = #{openid}
+    </select>
+
+    <insert id="addNewUser" parameterType="com.hd.clc.boya.db.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO User
+          (openid,
+                <if test="unionid != null">
+                  unionid,
+                </if>
+          addTime, lastLoginTime)
+        VALUES (#{openid},
+                <if test="unionid != null">
+                    #{unionid}
+                </if>
+                #{addTime}, #{lastLoginTime})
+    </insert>
+
+    <update id="updateUserInformation" parameterType="com.hd.clc.boya.db.entity.User">
+        UPDATE User
+        SET
+            <if test="userName != null">
+                userName = #{userName},
+            </if>
+            <if test="imagePath != null">
+                imagePath = #{imagePath},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="tel != null">
+                tel = #{tel},
+            </if>
+        updateTime = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUserLogin" parameterType="com.hd.clc.boya.db.entity.User">
+        UPDATE User
+        SET loginTimes = #{loginTimes}, lastLoginTime = #{lastLoginTime}
+        WHERE id = #{id}
+    </update>
+
+
+
+
+
 
 </mapper>
