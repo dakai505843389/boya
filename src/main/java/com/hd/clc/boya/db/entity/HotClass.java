@@ -10,5 +10,6 @@ public class HotClass {
     private Date    topTime;//置顶时间
     private Date    addTime;//增加时间
     private Date    updateTime;//更新时间
+    private Integer status;//状态（0：在线；1：暂停；2：过期）
     private Integer isDeleted;//是否删除（0：否；1：是）
 }

@@ -7,4 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper {
     User queryById(@Param("id") Integer id);
+    User queryByOpenid(@Param("openid") String openid);
+    int addNewUser(User user);
+    int updateUserInformation(User user);
+    int updateUserLogin(User user);
 }

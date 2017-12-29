@@ -12,8 +12,10 @@ import java.net.URLConnection;
 
 public class WxUtil {
 
-    private static String appid = "wxfe0d2b4095047837";
-    private static String secret = "99895fbe4170ed1f03be2adb72ecef12";
+    //private static String appid = "wxfe0d2b4095047837";
+    //private static String secret = "99895fbe4170ed1f03be2adb72ecef12";
+    private static String appid = "wxd02f55b5d6326765";
+    private static String secret = "eccf854d51c084e9530d3588b9b17777";
     private static String grant_type = "authorization_code";
     private static String URL = "https://api.weixin.qq.com/sns/jscode2session?";
 
