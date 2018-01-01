@@ -9,5 +9,6 @@ public interface TeacherMapper {
     Teacher queryById(@Param("id") Integer id);
     int deleteById(@Param("id") Integer id);
     Teacher queryByUserId(@Param("userId") Integer userId);
+    int addNewTeacher(Teacher teacher);
     int changeStatus(Teacher teacher);
 }

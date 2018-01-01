@@ -107,9 +107,10 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResultDetial applyTeacher(Integer userId, String description, Integer teacherType) {
         Map<String, Object> data = new HashMap<>();
-        String msg = null;
+        String msg = "";
         Teacher teacher = teacherMapper.queryByUserId(userId);
         if (teacher != null){
             Integer status = teacher.getStatus();
@@ -117,15 +118,22 @@ public class UserServiceImpl implements IUserService {
                 msg = "教师资格已申请，正在审核中！";
             } else if (status == 1){
                 msg = "用户已是教师，无需再次申请！";
-            } else if (status ==2 ){
+            } else if (status == 2){
                 msg = "教师资格被暂停，请联系相关人员！";
             }
         } else {
-
+            teacher = new Teacher();
+            teacher.setUserId(userId);
+            teacher.setDescription(description);
+            teacher.setTeacherType(teacherType);
+            teacher.setAddTime(new Date(System.currentTimeMillis()));
+            if (teacherMapper.addNewTeacher(teacher) < 1){
+                return new ResultDetial(-1, "申请教师资格失败", data);
+            } else {
+                msg = "申请已经提交，正在审核中！";
+                data.put("teacher", teacher);
+            }
         }
-
-
-
         return new ResultDetial(msg, data);
     }
 
