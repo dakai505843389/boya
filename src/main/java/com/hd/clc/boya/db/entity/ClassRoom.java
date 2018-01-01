@@ -1,7 +1,12 @@
 package com.hd.clc.boya.db.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Setter
+@Getter
 public class ClassRoom {
     private  Integer id;//数据库主键值
     private  String  classRoom;//教室

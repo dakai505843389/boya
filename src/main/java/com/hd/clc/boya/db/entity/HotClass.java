@@ -1,7 +1,12 @@
 package com.hd.clc.boya.db.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Setter
+@Getter
 public class HotClass {
     private Integer id;//数据库主键
     private Integer classId;//课程id

@@ -17,7 +17,7 @@ public class TeacherController {
     @Autowired
     private ITeacherService teacherService;
 
-    /**
+    /** 移动至managerController，所有非查询数据操作方法添加Transactional声明式事务管理
      * 教师审核通过接口
      * @param teacherId
      */

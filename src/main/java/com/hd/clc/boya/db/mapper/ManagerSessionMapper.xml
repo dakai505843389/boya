@@ -3,19 +3,27 @@
 <mapper namespace="com.hd.clc.boya.db.impl.ManagerSessionMapper">
 
     <sql id="Base_Column">
-        SID, managerId, status, addTime, outTime
+        SID, managerId, status, addTime, outTime, isDeleted
     </sql>
 
-    <select id="queryById" resultType="com.hd.clc.boya.db.entity.HotClass">
+    <insert id="add" parameterType="com.hd.clc.boya.db.entity.ManagerSession">
+        INSERT INTO Manager_Session
+        (SID, managerId, status, addTime, outTime)
+        VALUES (#{SID}, #{managerId}, #{status}, #{addTime}, #{outTime})
+    </insert>
+
+    <select id="queryBySID" resultType="com.hd.clc.boya.db.entity.ManagerSession">
         SELECT <include refid="Base_Column" />
-        FROM Hot_Class
-        WHERE id = #{id}
+        FROM Manager_Session
+        WHERE SID = #{SID}
         AND isDeleted = 0
     </select>
 
-    <update id="deleteById">
-        UPDATE Hot_Class SET isDeleted = 1
-        WHERE id = #{id}
+    <update id="deleteBySID">
+        UPDATE Manager_Session
+        SET isDeleted = 1
+        WHERE SID = #{SID}
     </update>
+
 
 </mapper>

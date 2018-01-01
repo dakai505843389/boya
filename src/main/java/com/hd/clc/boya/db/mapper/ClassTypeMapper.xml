@@ -18,4 +18,17 @@
         WHERE id = #{id}
     </update>
 
+    <insert id="addNewClassType" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Class_Type
+        (typeName, sortNum, addTime)
+        VALUES (#{typeName}, #{sortNum}, #{addTime})
+    </insert>
+
+    <select id="getMaxSortNum" resultType="Integer">
+        SELECT sortNum
+        FROM Class_Type
+        ORDER BY sortNum DESC
+        LIMIT 1;
+    </select>
+
 </mapper>

@@ -18,4 +18,10 @@
         WHERE id = #{id}
     </update>
 
+    <insert id="addNewClassRoom" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Class_Room
+        (classRoom, maxNumber, addTime)
+        VALUES (#{classRoom}, #{maxNumber}, #{addTime})
+    </insert>
+
 </mapper>

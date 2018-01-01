@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClassRoomMapper {
     ClassRoom queryById(@Param("id") Integer id);
+    int addNewClassRoom(ClassRoom classRoom);
 }

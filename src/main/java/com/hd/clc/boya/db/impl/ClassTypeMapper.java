@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClassTypeMapper {
     ClassType queryById(@Param("id") Integer id);
+    int addNewClassType(ClassType classType);
+    Integer getMaxSortNum();
 }

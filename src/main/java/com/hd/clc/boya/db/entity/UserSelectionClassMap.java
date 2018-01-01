@@ -1,7 +1,12 @@
 package com.hd.clc.boya.db.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Setter
+@Getter
 public class UserSelectionClassMap {
     private Integer id;//主键值
     private Integer userId;//用户ID

@@ -13,4 +13,5 @@ public class ManagerSession {
     private Integer status;
     private Date addTime;
     private Date outTime;
+    private Integer isDeleted;
 }
