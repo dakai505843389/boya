@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hd.clc.boya.db.impl.ManagerSessionMapper">
+
+    <sql id="Base_Column">
+        SID, managerId, status, addTime, outTime
+    </sql>
+
+    <select id="queryById" resultType="com.hd.clc.boya.db.entity.HotClass">
+        SELECT <include refid="Base_Column" />
+        FROM Hot_Class
+        WHERE id = #{id}
+        AND isDeleted = 0
+    </select>
+
+    <update id="deleteById">
+        UPDATE Hot_Class SET isDeleted = 1
+        WHERE id = #{id}
+    </update>
+
+</mapper>
