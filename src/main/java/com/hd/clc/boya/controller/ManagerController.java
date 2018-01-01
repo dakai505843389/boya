@@ -29,12 +29,13 @@ public class ManagerController {
 
     /**
      * 登录接口
-     * @param code
+     * @param
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(@RequestParam String code) {
-        return  managerService.login(code);
+    public Result login(@RequestParam String account,
+                        @RequestParam String password) {
+        return  managerService.login(account,password);
     }
 
 

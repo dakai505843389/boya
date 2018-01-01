@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface ManagerMapper {
     Manager queryById(@Param("id") Integer id);
     Manager queryByAccount(@Param("account") String  account);
+    int addNewManager(Manager manager);
+    int updateMangerLogin(Manager manager);
 }

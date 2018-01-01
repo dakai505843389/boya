@@ -57,6 +57,12 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateUserType" parameterType="com.hd.clc.boya.db.entity.User">
+        UPDATE User
+        SET userType = #{userType}
+        WHERE id = #{id}
+    </update>
+
 
 
 

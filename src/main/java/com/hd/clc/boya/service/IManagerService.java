@@ -6,6 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface IManagerService {
     ResultDetial register(String account,String password)throws Exception;
-    ResultDetial login(String code);
-
+    ResultDetial login(String account,String password);
 }

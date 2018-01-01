@@ -20,6 +20,19 @@
         AND isDeleted = 0
     </select>
 
+    <insert id="addNewManager" parameterType="com.hd.clc.boya.db.entity.Manager" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Manager
+        (account,password,addTime)
+        VALUES (#{account},#{password},#{addTime})
+
+    </insert>
+
+    <update id="updateMangerLogin" parameterType="com.hd.clc.boya.db.entity.Manager">
+        UPDATE Manager
+        SET lastLoginTime = #{lastLoginTime}
+        WHERE account = #{account}
+    </update>
+
     <update id="deleteById">
         UPDATE Manager SET isDeleted = 1
         WHERE id = #{id}

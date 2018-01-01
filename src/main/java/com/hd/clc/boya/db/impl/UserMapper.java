@@ -11,4 +11,5 @@ public interface UserMapper {
     int addNewUser(User user);
     int updateUserInformation(User user);
     int updateUserLogin(User user);
+    int updateUserType(User user);
 }

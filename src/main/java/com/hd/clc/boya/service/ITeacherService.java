@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ITeacherService {
     ResultDetial query(Integer id);
+    ResultDetial allowTeacher(Integer teacherId);
+    ResultDetial suspendTeacher(Integer teacherId);
 }
