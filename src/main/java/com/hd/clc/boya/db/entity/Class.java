@@ -13,8 +13,8 @@ public class Class {
     private String className;//课程名
     private String description;//课程描述
     private String classImagePath;//课程图片路径
-    private Integer numberLimit;//人数限制
-    private Integer countNumber;//总数
+    private Integer numberLimit;//最少开课人数
+    private Integer countNumber;//已选总人数
     private Integer singlePrice;//单人次价格
     private Integer isAllowGroup;//是否允许团购（0：不允许；1：允许）
     private Integer groupPrice;//团购价
