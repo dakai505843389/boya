@@ -3,9 +3,9 @@
 <mapper namespace="com.hd.clc.boya.db.impl.ClassMapper">
 
     <sql id="Base_Column">
-        id, belongTeacherId, className, description, classImagePath, numberLimit, countNumber ,singlePrice,
-        isAllowGroup, groupPrice, groupNumberLimit, classTypeId, classRoomId, classBeginTime, classEndTime,
-        classAddTime, classUpdateTime, status
+        id, belongTeacherId, className, description, classImagePath, classRoom, maxNumber, numberLimit,
+        countNumber, singlePrice, isAllowGroup, groupPrice, groupNumberLimit, classTypeId,
+        classBeginTime, classEndTime, classAddTime, classUpdateTime, status
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.Class">
@@ -19,5 +19,21 @@
         UPDATE Class SET isDeleted = 1
         WHERE id = #{id}
     </update>
+
+    <insert id="addNewClass" parameterType="com.hd.clc.boya.db.entity.Class" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Class
+        (belongTeacherId, className, description, classImagePath, classRoom, maxNumber, numberLimit,countNumber ,singlePrice, isAllowGroup,
+         <if test="isAllowGroup == 1">
+            groupPrice, groupNumberLimit,
+         </if>
+         classTypeId, classBeginTime, classEndTime, classAddTime)
+        VALUES (#{belongTeacherId}, #{className}, #{description}, #{classImagePath}, #{classRoom}, #{maxNumber},
+                #{numberLimit}, #{countNumber}, #{singlePrice}, #{isAllowGroup},
+                <if test="isAllowGroup == 1">
+                    #{groupPrice}, #{groupNumberLimit},
+                </if>
+                #{classTypeId}, #{classBeginTime}, #{classEndTime}, #{classAddTime}
+        )
+    </insert>
 
 </mapper>

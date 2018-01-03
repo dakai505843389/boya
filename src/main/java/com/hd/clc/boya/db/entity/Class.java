@@ -13,6 +13,8 @@ public class Class {
     private String className;//课程名
     private String description;//课程描述
     private String classImagePath;//课程图片路径
+    private String classRoom;//教室
+    private Integer maxNumber;//人数上限
     private Integer numberLimit;//最少开课人数
     private Integer countNumber;//已选总人数
     private Integer singlePrice;//单人次价格
@@ -20,7 +22,6 @@ public class Class {
     private Integer groupPrice;//团购价
     private Integer groupNumberLimit;//团购人数限制
     private Integer classTypeId;//课程类型ID
-    private Integer classRoomId;//课程教室ID
     private Date classBeginTime;//课程开始时间
     private Date classEndTime;//课程结束时间
     private Date classAddTime;//添加课程时间

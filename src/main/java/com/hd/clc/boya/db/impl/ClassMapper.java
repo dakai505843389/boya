@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClassMapper {
     Class queryById(@Param("id") Integer id);
+    Class addNewClass(Class classObject);
 }

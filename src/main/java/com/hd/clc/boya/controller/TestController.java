@@ -1,10 +1,14 @@
 package com.hd.clc.boya.controller;
 
 import com.hd.clc.boya.common.Result;
+import com.hd.clc.boya.common.ResultDetial;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/test")
 @CrossOrigin(value = "*", maxAge = 3600)
@@ -25,7 +29,12 @@ public class TestController {
         return new Result(1, "hello");
     }
 
-    public Result test2(){
-        return null;
+    @RequestMapping(value = "dateTest", method = RequestMethod.POST)
+    public Result dateTest(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date time)
+    {
+        Map<String, Object> data = new HashMap<>();
+        data.put("time", time);
+        data.put("newTime", new Date(System.currentTimeMillis()));
+        return new ResultDetial<>(data);
     }
 }
