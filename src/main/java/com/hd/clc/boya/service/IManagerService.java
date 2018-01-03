@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 
 @Service
 public interface IManagerService {
-    ResultDetial register(String account,String password)throws Exception;
+    ResultDetial add(String account,String password,Integer managerType,HttpServletRequest request)throws Exception;
     ResultDetial login(String account, String password, HttpServletRequest request);
     ResultDetial addNewClassRoom(String classRoom, Integer maxNumber, HttpServletRequest request);
     ResultDetial addNewClassType(String typeName, HttpServletRequest request);
+    ResultDetial changeClassTypeSortNum(Integer classTypeId1, Integer classTypeId2);
     Manager getManagerById(Integer managerId);
+
 }

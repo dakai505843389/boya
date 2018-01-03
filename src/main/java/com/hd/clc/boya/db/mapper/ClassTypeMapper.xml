@@ -31,4 +31,18 @@
         LIMIT 1;
     </select>
 
+    <select id="list" resultType="com.hd.clc.boya.db.entity.ClassType">
+        SELECT <include refid="Base_Column" />
+        FROM Class_Type
+        WHERE isDeleted = 0
+        ORDER BY sortNum DESC
+
+    </select>
+
+    <update id="changeClassTypeSortNum" parameterType="com.hd.clc.boya.db.entity.ClassType">
+        UPDATE Class_Type
+        SET sortNum =  #{sortNum}
+        WHERE id = #{id}
+    </update>
+
 </mapper>
