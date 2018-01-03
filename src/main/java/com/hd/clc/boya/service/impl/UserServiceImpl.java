@@ -4,9 +4,11 @@ import com.hd.clc.boya.common.BaseVar;
 import com.hd.clc.boya.common.FileUtil;
 import com.hd.clc.boya.common.ResultDetial;
 import com.hd.clc.boya.common.WxUtil;
+import com.hd.clc.boya.db.entity.ClassType;
 import com.hd.clc.boya.db.entity.HotClass;
 import com.hd.clc.boya.db.entity.Teacher;
 import com.hd.clc.boya.db.entity.User;
+import com.hd.clc.boya.db.impl.ClassTypeMapper;
 import com.hd.clc.boya.db.impl.HotClassMapper;
 import com.hd.clc.boya.db.impl.TeacherMapper;
 import com.hd.clc.boya.db.impl.UserMapper;
@@ -34,6 +36,9 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private TeacherMapper teacherMapper;
 
+    @Autowired
+    private ClassTypeMapper classTypeMapper;
+
     @Override
     public ResultDetial login(String code) {
         Map<String, Object> data = new HashMap<>();
@@ -46,6 +51,8 @@ public class UserServiceImpl implements IUserService {
         User user = userMapper.queryByOpenid(userCode.getOpenid());
         // 获取首页热门课程列表
         List<HotClass> hotClassList = hotClassMapper.query();
+        //获取课程类型列表
+        List<ClassType> classTypeList = classTypeMapper.list();
         // 若不存在，则为第一次登录，新建用户数据，将openid存入数据库
         if (user == null){
             user = new User();
@@ -72,6 +79,7 @@ public class UserServiceImpl implements IUserService {
             }
         }
         data.put("user", user);
+        data.put("classTypeList",classTypeList);
         data.put("hotClassList", hotClassList);
         return new ResultDetial<>(msg, data);
     }

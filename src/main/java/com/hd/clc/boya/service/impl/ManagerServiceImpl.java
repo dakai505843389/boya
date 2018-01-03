@@ -12,6 +12,7 @@ import com.hd.clc.boya.intercepter.MyIntercepter;
 import com.hd.clc.boya.service.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -44,6 +45,7 @@ public class ManagerServiceImpl implements IManagerService {
                 return new ResultDetial<>(-1, "登录失败！", data);
             } else {
                 msg = "登录成功";
+                manager.setPassword(password);
                 MyIntercepter.loginSuccess(request, manager.getId());
             }
 
@@ -55,24 +57,32 @@ public class ManagerServiceImpl implements IManagerService {
     }
 
     @Override
-    public ResultDetial register(String account, String password) throws Exception {
+    public ResultDetial add(String account, String password ,Integer managerType,HttpServletRequest request
+                                ) throws Exception {
         Map<String, Object> data = new HashMap<>();
         String msg;
         Manager manager = managerMapper.queryByAccount(account);
-        if (manager != null) {
-            return new ResultDetial<>(-1, "该管理员已存在", data);
-        } else {
-            manager = new Manager();
-            manager.setAccount(account);
-            manager.setPassword(MD5Util.toMd5(password));
-            manager.setAddTime(new Date(System.currentTimeMillis()));
-            if (managerMapper.addNewManager(manager) < 1) {
-                return new ResultDetial<>(-1, "新建用户失败！", data);
+        if (verifySuperManager(request)) {
+            if (manager != null) {
+                return new ResultDetial<>(-1, "该管理员已存在", data);
             } else {
-                msg = "注册成功";
-                data.put("manaher", manager);
+                manager = new Manager();
+                manager.setAccount(account);
+                manager.setPassword(MD5Util.toMd5(password));
+                manager.setAddTime(new Date(System.currentTimeMillis()));
+                manager.setManagerType(managerType);
+                if (managerMapper.addNewManager(manager) < 1) {
+                    return new ResultDetial<>(-1, "新建用户失败！", data);
+                } else {
+                    msg = "注册成功";
+                    manager.setPassword(password);
+                    data.put("manager", manager);
+                }
             }
+        }else {
+            return new ResultDetial<>(-1, "非超管不能添加管理员！", data);
         }
+
         return new ResultDetial<>(msg, data);
     }
 
@@ -94,7 +104,7 @@ public class ManagerServiceImpl implements IManagerService {
         } else {
             return new ResultDetial<>(-1, "非超管不能新增教室！", data);
         }
-        return new ResultDetial(msg, data);
+        return new ResultDetial<>(msg, data);
     }
 
     @Override
@@ -121,7 +131,44 @@ public class ManagerServiceImpl implements IManagerService {
         } else {
             return new ResultDetial<>(-1, "非超管不能新增课程类型！", data);
         }
-        return new ResultDetial(msg, data);
+        return new ResultDetial<>(msg, data);
+    }
+
+    @Override
+    @Transactional
+    public ResultDetial changeClassTypeSortNum(Integer classTypeId1, Integer classTypeId2){
+        Map<String, Object> data = new HashMap<>();
+        String msg = "";
+        ClassType classType1 = classTypeMapper.queryById(classTypeId1);
+        ClassType classType2 = classTypeMapper.queryById(classTypeId2);
+        if (classType1 != null){
+            if (classType2 != null){
+                if(classType1 != classType2){
+                    Integer t = classType1.getSortNum();
+                    classType1.setSortNum(classType2.getSortNum());
+                    classType2.setSortNum(t);
+                    if(classTypeMapper.changeClassTypeSortNum(classType1)<1){
+                        if(classTypeMapper.changeClassTypeSortNum(classType2)<1){
+                            return new ResultDetial<>(-1, "交换失败！", data);
+                        }
+                    }else {
+                        msg = "交换排名成功";
+                        data.put("classType1",classType1);
+                        data.put("classType2",classType2);
+                    }
+                }else {
+                    return new ResultDetial<>(-1, "输入id重复！", data);
+                }
+
+
+            }else {
+                return new ResultDetial<>(-1, "输入id有误！", data);
+            }
+
+        }else {
+            return new ResultDetial<>(-1, "输入id有误！", data);
+        }
+        return new ResultDetial<>(msg, data);
     }
 
     /*------------------------------------------公共方法------------------------------------------*/

@@ -17,21 +17,5 @@ public class TeacherController {
     @Autowired
     private ITeacherService teacherService;
 
-    /** 移动至managerController，所有非查询数据操作方法添加Transactional声明式事务管理
-     * 教师审核通过接口
-     * @param teacherId
-     */
-    @RequestMapping(value = "/allowTeacher",method = RequestMethod.POST)
-    public Result allowTeacher(@RequestParam Integer teacherId){
-        return  teacherService.allowTeacher(teacherId);
-    }
 
-    /**
-     * 暂停教师资格接口
-     * @param teacherId
-     */
-    @RequestMapping(value = "/suspendTeacher",method = RequestMethod.POST)
-    public Result suspendTeacher(@RequestParam Integer teacherId){
-        return  teacherService.suspendTeacher(teacherId);
-    }
 }

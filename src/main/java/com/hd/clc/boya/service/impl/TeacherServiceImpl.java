@@ -9,6 +9,7 @@ import com.hd.clc.boya.db.impl.UserMapper;
 import com.hd.clc.boya.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,9 @@ public class TeacherServiceImpl implements ITeacherService {
         data.put("teacher",teacher);
         return new ResultDetial(data);
     }
+
     @Override
+    @Transactional
     public ResultDetial allowTeacher(Integer teacherId){
        Map<String,Object> data = new HashMap<>();
        String msg = null;
@@ -40,8 +43,11 @@ public class TeacherServiceImpl implements ITeacherService {
            if(teacher.getStatus()==0 && user.getUserType()==0){
                user.setUserType(1);
                teacher.setStatus(1);
-               if(teacherMapper.changeStatus(teacher)<1 || userMapper.updateUserType(user)<1){
-                   return new ResultDetial<>(-1, "修改失败！", data);
+               if(teacherMapper.changeStatus(teacher)<1){
+                   if(userMapper.updateUserType(user)<1){
+                       return new ResultDetial<>(-1, "修改失败！", data);
+                   }
+
                }else{
                    msg="教师审核成功";
                    data.put("teacher",teacher);
@@ -55,6 +61,7 @@ public class TeacherServiceImpl implements ITeacherService {
 
 
     @Override
+    @Transactional
     public ResultDetial suspendTeacher(Integer teacherId){
         Map<String,Object> data = new HashMap<>();
         String msg = null;
@@ -66,8 +73,11 @@ public class TeacherServiceImpl implements ITeacherService {
             if(teacher.getStatus()==1 && user.getUserType()==1){
                 user.setUserType(0);
                 teacher.setStatus(2);
-                if(teacherMapper.changeStatus(teacher)<1 || userMapper.updateUserType(user)<1){
-                    return new ResultDetial<>(-1, "修改失败！", data);
+                if(teacherMapper.changeStatus(teacher)<1 ){
+                    if(userMapper.updateUserType(user)<1){
+                        return new ResultDetial<>(-1, "修改失败！", data);
+                    }
+
                 }else{
                     msg="暂停教师成功";
                     data.put("teacher",teacher);
