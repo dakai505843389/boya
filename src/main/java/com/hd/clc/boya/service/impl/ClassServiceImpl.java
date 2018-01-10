@@ -52,6 +52,7 @@ public class ClassServiceImpl implements IClassService {
         classObject.setClassEndTime(classEndTime);
         classObject.setClassAddTime(new Date(System.currentTimeMillis()));
 
+
         return null;
     }
 }
