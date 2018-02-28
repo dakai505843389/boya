@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.ManagerSessionMapper">
 
     <sql id="Base_Column">
-        SID, managerId, status, addTime, outTime, isDeleted
+        SID, managerId, status, addTime, outTime
     </sql>
 
     <insert id="add" parameterType="com.hd.clc.boya.db.entity.ManagerSession">

@@ -15,6 +15,7 @@ public class User {
     private String imagePath; //用户头像图片路径
     private Integer sex; //性别（0：女；1：男；2：保密）
     private String tel; //手机号
+    private Integer accountBalance;//账户余额
     private Date addTime; //添加时间
     private Date updateTime; //更新时间
     private Integer loginTimes; // 登录次数

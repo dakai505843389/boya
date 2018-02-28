@@ -86,7 +86,7 @@ public class UserServiceImpl implements IUserService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public ResultDetial modifyUser(Integer userId, String userName, MultipartFile image, Integer sex, String tel) throws Exception {
+    public ResultDetial modifyUser(Integer userId, String userName, String image, Integer sex, String tel) throws Exception {
         Map<String, Object> data = new HashMap<>();
         String msg = null;
         User user = userMapper.queryById(userId);
@@ -94,10 +94,10 @@ public class UserServiceImpl implements IUserService {
             user.setUserName(userName);
         }
         if (image != null){
-            String imagePath = BaseVar.USER_IMAGE_PATH + userId + "/";
+            /*String imagePath = BaseVar.USER_IMAGE_PATH + userId + "/";
             String fileName = FileUtil.upload4Stream(image.getInputStream(), imagePath, image.getOriginalFilename());
-            imagePath += fileName;
-            user.setImagePath(imagePath);
+            imagePath += fileName;*/
+            user.setImagePath(image);
         }
         if (sex != null){
             user.setSex(sex);

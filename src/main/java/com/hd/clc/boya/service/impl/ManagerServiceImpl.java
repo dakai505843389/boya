@@ -2,12 +2,9 @@ package com.hd.clc.boya.service.impl;
 
 import com.hd.clc.boya.common.MD5Util;
 import com.hd.clc.boya.common.ResultDetial;
-import com.hd.clc.boya.db.entity.ClassRoom;
-import com.hd.clc.boya.db.entity.ClassType;
-import com.hd.clc.boya.db.entity.Manager;
-import com.hd.clc.boya.db.impl.ClassRoomMapper;
-import com.hd.clc.boya.db.impl.ClassTypeMapper;
-import com.hd.clc.boya.db.impl.ManagerMapper;
+import com.hd.clc.boya.db.entity.*;
+import com.hd.clc.boya.db.entity.Class;
+import com.hd.clc.boya.db.impl.*;
 import com.hd.clc.boya.intercepter.MyIntercepter;
 import com.hd.clc.boya.service.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ManagerServiceImpl implements IManagerService {
@@ -26,10 +21,19 @@ public class ManagerServiceImpl implements IManagerService {
     private ManagerMapper managerMapper;
 
     @Autowired
-    private ClassRoomMapper classRoomMapper;
+    private ClassMapper classMapper;
 
     @Autowired
     private ClassTypeMapper classTypeMapper;
+
+    @Autowired
+    private HotClassMapper hotClassMapper;
+
+    @Autowired
+    private ClassServiceImpl classServiceImpl;
+
+    @Autowired
+    private ClassLogServiceImpl classLogServiceImpl;
 
     @Override
     public ResultDetial login(String account, String password, HttpServletRequest request) {
@@ -38,7 +42,6 @@ public class ManagerServiceImpl implements IManagerService {
         Manager manager = managerMapper.queryByAccount(account);
         if (manager == null) {
             return new ResultDetial<>(-1, "没有该用户", data);
-
         } else if (manager.getPassword().equals(MD5Util.toMd5(password))) {
             manager.setLastLoginTime(new Date(System.currentTimeMillis()));
             if (managerMapper.updateMangerLogin(manager) < 1) {
@@ -57,8 +60,7 @@ public class ManagerServiceImpl implements IManagerService {
     }
 
     @Override
-    public ResultDetial add(String account, String password ,Integer managerType,HttpServletRequest request
-                                ) throws Exception {
+    public ResultDetial add(String account, String password ,Integer managerType,HttpServletRequest request) throws Exception {
         Map<String, Object> data = new HashMap<>();
         String msg;
         Manager manager = managerMapper.queryByAccount(account);
@@ -83,27 +85,6 @@ public class ManagerServiceImpl implements IManagerService {
             return new ResultDetial<>(-1, "非超管不能添加管理员！", data);
         }
 
-        return new ResultDetial<>(msg, data);
-    }
-
-    @Override
-    public ResultDetial addNewClassRoom(String classRoom, Integer maxNumber, HttpServletRequest request) {
-        Map<String, Object> data = new HashMap<>();
-        String msg;
-        if (verifySuperManager(request)) {
-            ClassRoom classRoomObject = new ClassRoom();
-            classRoomObject.setClassRoom(classRoom);
-            classRoomObject.setMaxNumber(maxNumber);
-            classRoomObject.setAddTime(new Date(System.currentTimeMillis()));
-            if (classRoomMapper.addNewClassRoom(classRoomObject) < 1) {
-                return new ResultDetial<>(-1, "新增教室失败！", data);
-            } else {
-                msg = "新增教室成功！";
-                data.put("classRoom", classRoomObject);
-            }
-        } else {
-            return new ResultDetial<>(-1, "非超管不能新增教室！", data);
-        }
         return new ResultDetial<>(msg, data);
     }
 
@@ -159,8 +140,6 @@ public class ManagerServiceImpl implements IManagerService {
                 }else {
                     return new ResultDetial<>(-1, "输入id重复！", data);
                 }
-
-
             }else {
                 return new ResultDetial<>(-1, "输入id有误！", data);
             }
@@ -170,6 +149,87 @@ public class ManagerServiceImpl implements IManagerService {
         }
         return new ResultDetial<>(msg, data);
     }
+
+    @Override
+    public ResultDetial getAllowingClass(HttpServletRequest request) {
+        Map<String, Object> data = new HashMap<>();
+        List<Class> classList = classMapper.getAllowingClass();
+        if (classList != null && classList.size() != 0){
+            data.put("classList", classList);
+            return new ResultDetial("查询成功！", data);
+        } else {
+            return new ResultDetial(-1, "查询失败！", data);
+        }
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public ResultDetial allowClass(Integer classId) {
+        Map<String, Object> data = new HashMap<>();
+        Class classObject = classMapper.queryById(classId);
+        if (classObject != null){
+            if (classObject.getStatus() == 0){
+                if (classMapper.updateStatus(classId, 2) < 1){
+                    return new ResultDetial(-1, "审核修改失败！", data);
+                }else {
+                    int maxHotNum = hotClassMapper.getMaxSortNum();
+                    HotClass hotClass = new HotClass();
+                    hotClass.setClassId(classId);
+                    hotClass.setSortNum(maxHotNum + 1);
+                    hotClass.setAddTime(new Date(System.currentTimeMillis()));
+                    if (hotClassMapper.addNewHotClass(hotClass) < 1){
+                        return new ResultDetial(-1, "审核修改失败！", data);
+                    }else {
+                        Date classBeginTime = classObject.getClassBeginTime();
+                        //开启定时任务
+                        Timer timer = new Timer();
+                        //在课程开始三分钟前检测未完成支付的人数以及未完成的团购
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                Class classBeginObject = classMapper.queryById(classId);
+                                classServiceImpl.checkGroup(classObject);
+                            }
+                        }, new Date(classBeginTime.getTime() - 180000));
+                        //在课程开始前检测人数是否达到最低限制，并开始上课
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                Class classBeginObject = classMapper.queryById(classId);
+                                int status = classBeginObject.getStatus();
+                                if (status == 2 || status == 3) {
+                                    if (classBeginObject.getCountNumber() >= classBeginObject.getNumberLimit()) {
+                                        classLogServiceImpl.log(classId, "满足最低上课人数，开始上课！");
+                                        classServiceImpl.beginClassMethod(classObject);
+                                    } else {
+                                        classLogServiceImpl.log(classId, "未满足最低上课人数要求！");
+                                        classServiceImpl.shutClassmethod(classObject);
+                                    }
+                                }else {
+                                    if (status == 0){
+                                        classLogServiceImpl.log(classId, "课程未通过审核！");
+                                    }else if (status == 1){
+                                        classLogServiceImpl.log(classId, "课程被暂停！");
+                                    }else if (status == 4){
+                                        classLogServiceImpl.log(classId, "课程已开始！");
+                                    }else if (status == 5){
+                                        classLogServiceImpl.log(classId, "课程已停止！");
+                                    }
+                                }
+                            }
+                        }, classBeginTime);
+                        return new ResultDetial("审核通过！", data);
+                    }
+                }
+            }else {
+                return new ResultDetial(-1, "该课程不处于待审核状态！", data);
+            }
+        }else {
+            return new ResultDetial(-1,"不存在该课程！", data);
+        }
+    }
+
 
     /*------------------------------------------公共方法------------------------------------------*/
     @Override
@@ -191,4 +251,5 @@ public class ManagerServiceImpl implements IManagerService {
             return false;
         }
     }
+
 }

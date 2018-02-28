@@ -26,4 +26,24 @@
         ORDER BY isTop DESC , sortNum DESC
     </select>
 
+    <select id="getMaxSortNum" resultType="Integer">
+        SELECT sortNum
+        FROM Hot_Class
+        WHERE isDeleted = 0
+        ORDER BY sortNum DESC
+        LIMIT 1
+    </select>
+
+    <insert id="addNewHotClass" parameterType="com.hd.clc.boya.db.entity.HotClass" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Hot_Class
+        (classId, sortNum, addTime)
+        VALUES (#{classId}, #{sortNum}, #{addTime})
+    </insert>
+
+    <update id="classBegin">
+        UPDATE Hot_Class
+        SET status = 2
+        WHERE classId = #{classId}
+    </update>
+
 </mapper>

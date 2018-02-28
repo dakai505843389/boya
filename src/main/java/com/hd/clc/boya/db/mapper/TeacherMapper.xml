@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.TeacherMapper">
 
     <sql id="Base_Column">
-         id, userId, description, score, fansNum, teacherType, status, addTime, updateTime
+         id, userId, description, score, scoreTimes, fansNum, teacherType, status, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.Teacher">
@@ -34,6 +34,18 @@
     <update id="changeStatus" parameterType="com.hd.clc.boya.db.entity.Teacher">
         UPDATE Teacher
         SET status =  #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateScore" parameterType="com.hd.clc.boya.db.entity.Teacher">
+        UPDATE Teacher
+        SET score = #{score}, scoreTimes = #{scoreTimes}
+        WHERE id = #{id}
+    </update>
+
+    <update id="addNewFans">
+        UPDATE Teacher
+        SET fansNum = fansNum + 1
         WHERE id = #{id}
     </update>
 

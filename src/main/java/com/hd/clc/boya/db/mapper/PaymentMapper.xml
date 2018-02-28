@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.PaymentMapper">
 
     <sql id="Base_Column">
-        id, addTime
+        id, userId, teacherId, classId, selectionMapId, price, status, payTime, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.Payment">
@@ -15,6 +15,18 @@
 
     <update id="deleteById">
         UPDATE Payment SET isDeleted = 1
+        WHERE id = #{id}
+    </update>
+
+    <insert id="addNewPayment" parameterType="com.hd.clc.boya.db.entity.Payment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Payment
+        (userId, teacherId, classId, selectionMapId, price, addTime)
+        VALUES (#{userId}, #{teacherId}, #{classId}, #{selectionMapId}, #{price}, #{addTime})
+    </insert>
+    
+    <update id="paySuccess" parameterType="com.hd.clc.boya.db.entity.Payment">
+        UPDATE Payment
+        SET status = #{status}, payTime = #{payTime}, updateTime = #{updateTime}
         WHERE id = #{id}
     </update>
 

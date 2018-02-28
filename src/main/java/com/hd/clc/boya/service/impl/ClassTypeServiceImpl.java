@@ -30,9 +30,6 @@ public class ClassTypeServiceImpl implements IClassTypeService {
             data.put("classTypeList",classTypeList);
             msg = "获取成功";
         }
-
-
-
         return new ResultDetial<>(msg, data);
     }
 }

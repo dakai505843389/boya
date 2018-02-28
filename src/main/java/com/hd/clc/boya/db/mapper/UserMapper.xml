@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.UserMapper">
 
     <sql id="Base_Column">
-        id, openid, unionid, userName, imagePath, sex, tel, addTime, updateTime, loginTimes, lastLoginTime, userType
+        id, openid, unionid, userName, imagePath, sex, tel, accountBalance, addTime, updateTime, loginTimes, lastLoginTime, userType
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.User">
@@ -63,7 +63,11 @@
         WHERE id = #{id}
     </update>
 
-
+    <update id="updateAccountBalance" parameterType="com.hd.clc.boya.db.entity.User">
+        UPDATE User
+        SET accountBalance = #{accountBalance}
+        WHERE id = #{id}
+    </update>
 
 
 

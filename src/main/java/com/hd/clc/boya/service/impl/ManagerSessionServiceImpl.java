@@ -4,7 +4,9 @@ import com.hd.clc.boya.db.entity.ManagerSession;
 import com.hd.clc.boya.db.impl.ManagerSessionMapper;
 import com.hd.clc.boya.service.IManagerSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ManagerSessionServiceImpl implements IManagerSessionService {
 
     @Autowired
@@ -17,7 +19,6 @@ public class ManagerSessionServiceImpl implements IManagerSessionService {
         } else {
             return true;
         }
-
     }
 
     @Override

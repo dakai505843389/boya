@@ -9,11 +9,22 @@ public class ResultDetial<T> extends Result {
         this.data = data;
     }
 
+    /**
+     * 接口调用成功的返回结果
+     * @param msg
+     * @param data
+     */
     public ResultDetial(String msg, T data){
         super(0, msg);
         this.data = data;
     }
 
+    /**
+     * 接口调用失败的返回结果
+     * @param code
+     * @param msg
+     * @param data
+     */
     public ResultDetial(int code, String msg, T data){
         super(code, msg);
         this.data = data;

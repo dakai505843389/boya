@@ -11,4 +11,6 @@ public interface TeacherMapper {
     Teacher queryByUserId(@Param("userId") Integer userId);
     int addNewTeacher(Teacher teacher);
     int changeStatus(Teacher teacher);
+    int updateScore(Teacher teacher);
+    int addNewFans(@Param("id") int id);
 }

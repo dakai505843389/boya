@@ -12,4 +12,5 @@ public interface UserMapper {
     int updateUserInformation(User user);
     int updateUserLogin(User user);
     int updateUserType(User user);
+    int updateAccountBalance(User user);
 }

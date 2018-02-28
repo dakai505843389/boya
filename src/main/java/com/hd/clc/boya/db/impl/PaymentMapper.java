@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PaymentMapper {
     Payment queryById(@Param("id") Integer id);
+    int addNewPayment(Payment payment);
+    int paySuccess(Payment payment);
 }

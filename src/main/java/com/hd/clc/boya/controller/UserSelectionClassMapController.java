@@ -1,6 +1,7 @@
 package com.hd.clc.boya.controller;
 
 import com.hd.clc.boya.service.IUserSelectionClassMapService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/userSelectionClassMap")
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
+@Api(value = "UserSelectionClassMapController", tags = "用户选课映射Controller")
 public class UserSelectionClassMapController {
+
     @Qualifier("userSelectionClassMapServiceImpl")
     @Autowired
     private IUserSelectionClassMapService userSelectionClassMapService;

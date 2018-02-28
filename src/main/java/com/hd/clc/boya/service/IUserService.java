@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Repository
 public interface IUserService {
     ResultDetial login(String code);
-    ResultDetial modifyUser(Integer userId, String userName, MultipartFile image, Integer sex, String tel) throws Exception;
+    ResultDetial modifyUser(Integer userId, String userName, String image, Integer sex, String tel) throws Exception;
     ResultDetial applyTeacher(Integer userId, String description, Integer teacherType);
 }

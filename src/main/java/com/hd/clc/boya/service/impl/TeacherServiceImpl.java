@@ -26,8 +26,12 @@ public class TeacherServiceImpl implements ITeacherService {
     public ResultDetial query(Integer id) {
         Map<String, Object> data = new HashMap<>();
         Teacher teacher =teacherMapper.queryById(id);
-        data.put("teacher",teacher);
-        return new ResultDetial(data);
+        if (teacher != null) {
+            data.put("teacher", teacher);
+            return new ResultDetial("查询成功！", data);
+        }else {
+            return new ResultDetial(-1, "查询失败", data);
+        }
     }
 
     @Override

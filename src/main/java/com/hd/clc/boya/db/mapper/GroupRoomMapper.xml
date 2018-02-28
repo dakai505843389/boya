@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hd.clc.boya.db.impl.GroupRoomMapper">
+
+    <sql id="Base_Column">
+        id, classId, wxacode, countNum, maxNum, paidNum, status, addTime, updateTime
+    </sql>
+
+    <select id="queryById" resultType="com.hd.clc.boya.db.entity.GroupRoom">
+        SELECT <include refid="Base_Column" />
+        FROM Group_Room
+        WHERE id = #{id}
+        AND isDeleted = 0
+    </select>
+
+    <update id="deleteById">
+        UPDATE Group_Room SET isDeleted = 1
+        WHERE id = #{id}
+    </update>
+
+    <insert id="createNewGroup" parameterType="com.hd.clc.boya.db.entity.GroupRoom" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Group_Room
+        (classId, wxacode, countNum, maxNum)
+        VALUES (#{classId}, #{wxacode}, #{countNum}, #{maxNum})
+    </insert>
+
+    <update id="updateWxacode">
+        update Group_Room
+        SET wxacode = #{wxacode}
+        WHERE id = #{id}
+    </update>
+
+    <update id="modifyStatusForPaid">
+        UPDATE Group_Room
+        SET status = 2, paidNum = #{paidNum}
+        WHERE id = #{id}
+    </update>
+
+    <update id="modifyPaidNum">
+        UPDATE Group_Room
+        SET paidNum = #{paidNum}
+        WHERE id = #{id}
+    </update>
+
+    <update id="addNewNumber">
+        UPDATE Group_Room
+        SET countNum = countNum + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="modifyStatusForFull">
+        UPDATE Group_Room
+        SET status = 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="modifyStatusForshut">
+        UPDATE Group_Room
+        SET status = 3
+        WHERE id = #{id}
+    </update>
+
+    <select id="getList">
+        SELECT <include refid="Base_Column"/>
+        FROM Group_Room
+        WHERE classId = #{classId}
+        AND ( status = 0 OR status = 1)
+        AND isDeleted = 0
+    </select>
+
+</mapper>

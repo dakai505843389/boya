@@ -18,4 +18,17 @@
         WHERE id = #{id}
     </update>
 
+    <select id="checkRepeat">
+        SELECT COUNT(*)
+        FROM User_Collection_Teacher_Map
+        WHERE userId = #{userId}
+        AND teacherId = #{teacherId}
+    </select>
+
+    <insert id="add" parameterType="com.hd.clc.boya.db.entity.UserCollectionTeacherMap">
+        INSERT INTO User_Collection_Teacher_Map
+        (userId, teacherId, addTime)
+        VALUES (#{userId}, #{teacherId}, #{addTime})
+    </insert>
+
 </mapper>

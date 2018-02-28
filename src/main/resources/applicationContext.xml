@@ -23,7 +23,8 @@
     <!-- 开启注解-->
     <mvc:annotation-driven/>
     <!-- 静态资源访问 -->
-    <mvc:resources mapping="/upload/**" location="/upload/" />
+    <mvc:default-servlet-handler />
+    <!--<mvc:resources mapping="/upload/**" location="/upload/" />-->
 
     <!-- 设置返回值的形式 -->
     <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
@@ -103,5 +104,8 @@
             </list>
         </constructor-arg>
     </bean>
+
+    <task:annotation-driven scheduler="myScheduler"/>
+    <task:scheduler id="myScheduler" pool-size="5"/>
 
 </beans>

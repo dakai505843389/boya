@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeacherEvaluationMapper {
     TeacherEvaluation queryById(@Param("id") Integer id);
+    int add(TeacherEvaluation teacherEvaluation);
 }
