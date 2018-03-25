@@ -9,5 +9,5 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public interface IPaymentService {
     public Result getPaySign(Integer userId, Integer selectionMapId, HttpServletRequest request);
-    public void wxNotify(HttpServletRequest request, HttpServletResponse response);
+    public String wxNotify(HttpServletRequest request, HttpServletResponse response);
 }

@@ -3,7 +3,8 @@
 <mapper namespace="com.hd.clc.boya.db.impl.HotClassMapper">
 
     <sql id="Base_Column">
-        id, classId, sortNum, isTop, topTime, addTime, updateTime, status
+        id, classId, className, classRoom, classBeginTime, isAllowGroup, classImagePath, teacherType,
+         sortNum, isTop, topTime, addTime, updateTime, status
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.HotClass">
@@ -36,8 +37,8 @@
 
     <insert id="addNewHotClass" parameterType="com.hd.clc.boya.db.entity.HotClass" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Hot_Class
-        (classId, sortNum, addTime)
-        VALUES (#{classId}, #{sortNum}, #{addTime})
+        (classId, className, classRoom, classBeginTime, isAllowGroup, classImagePath, teacherType, sortNum, addTime)
+        VALUES (#{classId}, #{className}, #{classRoom}, #{classBeginTime}, #{isAllowGroup}, #{classImagePath}, #{teacherType}, #{sortNum}, #{addTime})
     </insert>
 
     <update id="classBegin">

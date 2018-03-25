@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.ClassMapper">
 
     <sql id="Base_Column">
-        id, belongTeacherId, className, description, classImagePath, classRoom, maxNumber, numberLimit,
+        id, belongTeacherId, className, description, teacherName, teacherImagePath, classImagePath, classRoom, maxNumber, numberLimit,
         countNumber, singlePrice, isAllowGroup, groupPrice, groupNumberLimit, classTypeId, paidAmount,
         classBeginTime, classEndTime, classAddTime, classUpdateTime, status
     </sql>
@@ -22,13 +22,14 @@
 
     <insert id="addNewClass" parameterType="com.hd.clc.boya.db.entity.Class" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Class
-        (belongTeacherId, className, description, classImagePath, classRoom, maxNumber, numberLimit,countNumber ,singlePrice, isAllowGroup,
+        (belongTeacherId, className, description, teacherName, teacherImagePath, classImagePath, classRoom, maxNumber, numberLimit ,singlePrice, isAllowGroup,
          <if test="isAllowGroup == 1">
             groupPrice, groupNumberLimit,
          </if>
          classTypeId, classBeginTime, classEndTime, classAddTime)
-        VALUES (#{belongTeacherId}, #{className}, #{description}, #{classImagePath}, #{classRoom}, #{maxNumber},
-                #{numberLimit}, #{countNumber}, #{singlePrice}, #{isAllowGroup},
+        VALUES (#{belongTeacherId}, #{className}, #{description}, #{teacherName}, #{teacherImagePath},
+                #{classImagePath}, #{classRoom}, #{maxNumber},
+                #{numberLimit}, #{singlePrice}, #{isAllowGroup},
                 <if test="isAllowGroup == 1">
                     #{groupPrice}, #{groupNumberLimit},
                 </if>

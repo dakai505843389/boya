@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.ClassTypeMapper">
 
     <sql id="Base_Column">
-        id, typeName, sortNum, addTime, updateTime
+        id, typeName, imagePath, sortNum, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.ClassType">
@@ -20,8 +20,8 @@
 
     <insert id="addNewClassType" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Class_Type
-        (typeName, sortNum, addTime)
-        VALUES (#{typeName}, #{sortNum}, #{addTime})
+        (typeName, imagePath, sortNum, addTime)
+        VALUES (#{typeName}, #{imagePath}, #{sortNum}, #{addTime})
     </insert>
 
     <select id="getMaxSortNum" resultType="Integer">

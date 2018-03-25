@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RequestMapping("/class")
@@ -22,7 +23,7 @@ public class ClassController {
     @Autowired
     private IClassService classService;
 
-    @RequestMapping(value = "releaseClass", method = RequestMethod.POST)
+    @RequestMapping(value = "/releaseClass", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "发布课程接口")
     @ApiImplicitParams({
@@ -38,8 +39,8 @@ public class ClassController {
             @ApiImplicitParam(name = "groupPrice", value = "团购价格", required = false, dataType = "int", paramType = "form"),
             @ApiImplicitParam(name = "groupNumberLimit", value = "拼团人数", required = false, dataType = "int", paramType = "form"),
             @ApiImplicitParam(name = "classTypeId", value = "课程类型id", required = true, dataType = "int", paramType = "form"),
-            @ApiImplicitParam(name = "classBeginTime", value = "课程开始时间（yyyy-MM-dd hh:mm:ss）", required = true, dataType = "Date", paramType = "form"),
-            @ApiImplicitParam(name = "classEndTime", value = "课程结束时间（yyyy-MM-dd hh:mm:ss）", required = true, dataType = "Date", paramType = "form"),
+            @ApiImplicitParam(name = "classBeginTime", value = "课程开始时间（yyyy-MM-dd HH:mm:ss）", required = true, dataType = "Date", paramType = "form"),
+            @ApiImplicitParam(name = "classEndTime", value = "课程结束时间（yyyy-MM-dd HH:mm:ss）", required = true, dataType = "Date", paramType = "form"),
     })
     public Result releaseClass(@RequestParam Integer teacherId,
                                @RequestParam String className,
@@ -53,8 +54,8 @@ public class ClassController {
                                @RequestParam(required = false) Integer groupPrice,
                                @RequestParam(required = false) Integer groupNumberLimit,
                                @RequestParam Integer classTypeId,
-                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date classBeginTime,
-                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") Date classEndTime
+                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date classBeginTime,
+                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date classEndTime
                                ) throws Exception {
         return classService.releaseClass(teacherId, className, description, classImage, classRoom,
                                          maxNumber, numberLimit,
@@ -62,7 +63,7 @@ public class ClassController {
                                          classTypeId, classBeginTime, classEndTime);
     }
 
-    @RequestMapping(value = "chooseClass", method = RequestMethod.POST)
+    @RequestMapping(value = "/chooseClass", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "选课接口")
     @ApiImplicitParams({
@@ -72,12 +73,24 @@ public class ClassController {
     })
     public Result chooseClass(@RequestParam Integer userId,
                               @RequestParam Integer classId,
-                              @RequestParam Integer isGroup
+                              @RequestParam Integer isGroup,
+                              HttpServletRequest request
                               ){
-        return classService.chooseClass(userId, classId, isGroup);
+        return classService.chooseClass(userId, classId, isGroup, request);
     }
 
-    @RequestMapping(value = "beginClass/", method = RequestMethod.POST)
+    @RequestMapping(value = "/revokeClass", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "form"),
+        @ApiImplicitParam(name = "selectionMapId", value = "选课映射ID", required = true, dataType = "int", paramType = "form")
+    })
+    @ApiOperation(value = "退课接口")
+    public Result revokeClass(@RequestParam int userId, @RequestParam int selectionMapId){
+        return classService.revokeClass(userId, selectionMapId);
+    }
+
+    @RequestMapping(value = "/beginClass", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "确认上课接口")
     @ApiImplicitParams({
@@ -87,6 +100,16 @@ public class ClassController {
     public Result beginClass(@RequestParam Integer teacherId,
                              @RequestParam Integer classId){
         return classService.beginClass(teacherId, classId);
+    }
+
+    @RequestMapping(value = "/queryById", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "查询课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "classId", value = "课程id", required = true, dataType = "int", paramType = "form")
+    })
+    public Result queryById(@RequestParam Integer classId){
+        return classService.queryById(classId);
     }
 
 }

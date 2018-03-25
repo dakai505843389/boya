@@ -52,7 +52,7 @@ public class PaymentController {
     @RequestMapping(value="/wxNotify", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "支付结果通知接口（微信服务器调用）")
-    public void wxNotify(HttpServletRequest request, HttpServletResponse response){
-        paymentService.wxNotify(request, response);
+    public String wxNotify(HttpServletRequest request, HttpServletResponse response){
+        return paymentService.wxNotify(request, response);
     }
 }

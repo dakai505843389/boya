@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RequestMapping("/util")
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
@@ -25,8 +27,8 @@ public class UtilController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "image", value = "图片", required = true, dataType = "file", paramType = "form")
     })
-    public Result uploadImage(MultipartFile image){
-        return utilService.uploadImage(image);
+    public Result uploadImage(MultipartFile image, HttpServletRequest request){
+        return utilService.uploadImage(image, request);
     }
 
 }

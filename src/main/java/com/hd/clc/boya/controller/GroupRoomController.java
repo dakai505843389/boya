@@ -24,7 +24,8 @@ public class GroupRoomController {
     @ResponseBody
     @ApiOperation(value = "扫码加入团购")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "classId", value = "课程id", required = true, dataType = "int", paramType = "form"),
+            @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "int", paramType = "form"),
+            @ApiImplicitParam(name = "sceneStr", value = "sceneStr", required = true, dataType = "String", paramType = "form")
     })
     public Result scanCodeForGroup(Integer userId, String sceneStr){
         return groupRoomService.scanCodeForGroup(userId, sceneStr);

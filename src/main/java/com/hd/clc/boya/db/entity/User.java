@@ -20,5 +20,5 @@ public class User {
     private Date updateTime; //更新时间
     private Integer loginTimes; // 登录次数
     private Date lastLoginTime; //最后登录时间
-    private Integer userType; //用户类型（0：学生；1：教师）
+    private Integer userType; //用户类型（0：学生；1：教师2：教师资格审核中）
 }

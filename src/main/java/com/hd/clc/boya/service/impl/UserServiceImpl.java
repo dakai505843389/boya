@@ -116,7 +116,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public ResultDetial applyTeacher(Integer userId, String description, Integer teacherType) {
+    public ResultDetial applyTeacher(Integer userId, String imagePath, String name, String tel, String description, String specialize, String experience, Integer teacherType) {
         Map<String, Object> data = new HashMap<>();
         String msg = "";
         Teacher teacher = teacherMapper.queryByUserId(userId);
@@ -132,13 +132,22 @@ public class UserServiceImpl implements IUserService {
         } else {
             teacher = new Teacher();
             teacher.setUserId(userId);
+            teacher.setImagePath(imagePath);
+            teacher.setName(name);
+            teacher.setTel(tel);
             teacher.setDescription(description);
+            teacher.setSpecialize(specialize);
+            teacher.setExperience(experience);
             teacher.setTeacherType(teacherType);
             teacher.setAddTime(new Date(System.currentTimeMillis()));
             if (teacherMapper.addNewTeacher(teacher) < 1){
                 return new ResultDetial(-1, "申请教师资格失败", data);
             } else {
+                User user = userMapper.queryById(userId);
+                user.setUserType(2);
+                userMapper.updateUserType(user);
                 msg = "申请已经提交，正在审核中！";
+                data.put("user", user);
                 data.put("teacher", teacher);
             }
         }

@@ -8,5 +8,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface IUserService {
     ResultDetial login(String code);
     ResultDetial modifyUser(Integer userId, String userName, String image, Integer sex, String tel) throws Exception;
-    ResultDetial applyTeacher(Integer userId, String description, Integer teacherType);
+    ResultDetial applyTeacher(Integer userId, String imagePath, String name, String tel, String description, String specialize, String experience, Integer teacherType);
 }

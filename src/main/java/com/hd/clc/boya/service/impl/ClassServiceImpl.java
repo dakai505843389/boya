@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +59,8 @@ public class ClassServiceImpl implements IClassService {
             classObject.setBelongTeacherId(teacherId);
             classObject.setClassName(className);
             classObject.setDescription(description);
+            classObject.setTeacherName(teacher.getName());
+            classObject.setTeacherImagePath(teacher.getImagePath());
             classObject.setClassImagePath(classImage);
             classObject.setClassRoom(classRoom);
             classObject.setMaxNumber(maxNumber);
@@ -93,7 +96,7 @@ public class ClassServiceImpl implements IClassService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result chooseClass(Integer userId, Integer classId, Integer isGroup) {
+    public Result chooseClass(Integer userId, Integer classId, Integer isGroup, HttpServletRequest request) {
         Map<String, Object> data = new HashMap<>();
         String msg;
         if (userSelectionClassMapMapper.queryForRepeated(userId, classId) < 1 ){
@@ -107,12 +110,13 @@ public class ClassServiceImpl implements IClassService {
                 if (isGroup == 1) {
                     if (classObject.getIsAllowGroup() == 1) {
                         classObject.setCountNumber(classObject.getCountNumber() + classObject.getGroupNumberLimit());
-                        if (classObject.getCountNumber() <= classObject.getNumberLimit()) {
+                        if (classObject.getCountNumber() <= classObject.getMaxNumber()) {
                             GroupRoom groupRoom = new GroupRoom();
                             groupRoom.setClassId(classId);
                             groupRoom.setCountNum(1);
                             groupRoom.setMaxNum(classObject.getMaxNumber());
-                            String pathName = BaseVar.UPLOAD_PATH + "qrCode/" + groupRoom.getId().toString();
+                            String path = request.getSession().getServletContext().getRealPath("/");
+                            String pathName = path + "upload/qrCode/" + groupRoom.getId().toString();
                             if (WxUtil.getminiqrQr(groupRoom.getId().toString(), BaseVar.USER_GROUP_WXACODE_PATH, pathName)) {
                                 groupRoom.setWxacode(pathName);
                                 if (groupRoomMapper.createNewGroup(groupRoom) < 1) {
@@ -124,7 +128,7 @@ public class ClassServiceImpl implements IClassService {
                                         TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                                         return new ResultDetial<>(-1, "创建订单失败！", data);
                                     }
-                                    if (classObject.getCountNumber() == classObject.getNumberLimit()){
+                                    if (classObject.getCountNumber() == classObject.getMaxNumber()){
                                         classObject.setStatus(3);
                                     }
                                     classMapper.updateNumber(classObject);
@@ -148,7 +152,7 @@ public class ClassServiceImpl implements IClassService {
                         return new ResultDetial<>(-1, "创建订单失败！", data);
                     } else {
                         classObject.setCountNumber(classObject.getCountNumber() + 1);
-                        if (classObject.getCountNumber() == classObject.getNumberLimit()){
+                        if (classObject.getCountNumber() == classObject.getMaxNumber()){
                             classObject.setStatus(3);
                         }
                         classMapper.updateNumber(classObject);
@@ -190,6 +194,30 @@ public class ClassServiceImpl implements IClassService {
             msg = "课程已停止！";
         }else {
             msg = "课程不能正常开始！";
+        }
+        return new ResultDetial<>(msg, data);
+    }
+
+    @Override
+    public Result queryById(int classId) {
+        Map<String, Object> data = new HashMap<>();
+        String msg;
+        Class classObject = classMapper.queryById(classId);
+        data.put("class", classObject);
+        msg = "查询课程成功~~";
+        return new ResultDetial<>(msg, data);
+    }
+
+    @Override
+    public Result revokeClass(int userId, int selectionMapId) {
+        Map<String, Object> data = new HashMap<>();
+        String msg;
+        UserSelectionClassMap userSelectionClassMap = userSelectionClassMapMapper.queryById(selectionMapId);
+        if (userSelectionClassMap != null){
+
+            msg = "";
+        }else {
+            msg = "无该选课信息！";
         }
         return new ResultDetial<>(msg, data);
     }

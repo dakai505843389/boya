@@ -77,10 +77,12 @@ public class ManagerController {
     @ApiOperation(value = "新增课程类型接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "typeName", value = "类型名", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "imagePath", value = "图片路径", required = true, dataType = "String", paramType = "form")
     })
     public Result addNewClassType(@RequestParam String typeName,
+                                  @RequestParam String imagePath,
                                   HttpServletRequest request){
-        return managerService.addNewClassType(typeName, request);
+        return managerService.addNewClassType(typeName, imagePath, request);
     }
 
     /**
@@ -103,7 +105,7 @@ public class ManagerController {
      */
     @RequestMapping(value = "/suspendTeacher",method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "教师教室资格接口")
+    @ApiOperation(value = "暂停教师资格接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "teacherId", value = "教师id", required = true, dataType = "int", paramType = "form"),
     })

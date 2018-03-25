@@ -72,6 +72,9 @@ public class StringUtil {
         String prestr = "";
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
+            if ("sign".equals(key)){
+                continue;
+            }
             String value = params.get(key);
             if (i == keys.size() - 1) {// 拼接时，不包括最后一个&字符
                 prestr = prestr + key + "=" + value;
@@ -121,8 +124,8 @@ public class StringUtil {
      * @return 签名结果
      */
     public static boolean verify(String text, String sign, String key, String input_charset) {
-        text = text + key;
-        String mysign = DigestUtils.md5Hex(getContentBytes(text, input_charset));
+        text = text + "&key=" +key;
+        String mysign = DigestUtils.md5Hex(getContentBytes(text, input_charset)).toUpperCase();
         if (mysign.equals(sign)) {
             return true;
         } else {

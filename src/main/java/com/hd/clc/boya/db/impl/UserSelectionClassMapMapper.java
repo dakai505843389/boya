@@ -18,4 +18,6 @@ public interface UserSelectionClassMapMapper {
     List<UserSelectionClassMap> getListByGroupId(@Param("groupRoomId") int groupRoomId);
     int shutdown(UserSelectionClassMap userSelectionClassMap);
     int evaluted(@Param("id") int id);
+    UserSelectionClassMap queryByUserIdAndClassId(@Param("userId") Integer userId, @Param("classId") Integer classId);
+    int updatePaymentId(@Param("id") int id, @Param("paymentId") int paymentId);
 }

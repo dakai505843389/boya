@@ -10,6 +10,7 @@ import java.util.Date;
 public class ClassType {
     private  Integer id;//数据库主键
     private  String typeName;//课程类型名称
+    private String imagePath;
     private  Integer sortNum;//排序
     private  Date    addTime;//增加时间
     private  Date    updateTime;//更新时间

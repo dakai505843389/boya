@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.PaymentMapper">
 
     <sql id="Base_Column">
-        id, userId, teacherId, classId, selectionMapId, price, status, payTime, addTime, updateTime
+        id, userId, teacherId, classId, selectionMapId, price, out_trade_no, paySignId, status, payTime, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.Payment">
@@ -20,13 +20,39 @@
 
     <insert id="addNewPayment" parameterType="com.hd.clc.boya.db.entity.Payment" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Payment
-        (userId, teacherId, classId, selectionMapId, price, addTime)
-        VALUES (#{userId}, #{teacherId}, #{classId}, #{selectionMapId}, #{price}, #{addTime})
+        (userId, teacherId, classId, selectionMapId, price, out_trade_no, addTime)
+        VALUES (#{userId}, #{teacherId}, #{classId}, #{selectionMapId}, #{price}, #{out_trade_no}, #{addTime})
     </insert>
     
     <update id="paySuccess" parameterType="com.hd.clc.boya.db.entity.Payment">
         UPDATE Payment
         SET status = #{status}, payTime = #{payTime}, updateTime = #{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="checkForRepeated" resultType="int">
+        select COUNT(1)
+        FROM Payment
+        WHERE selectionMapId = #{selectionMapId}
+        AND isDeleted = 0
+    </select>
+
+    <update id="updateSignId" parameterType="com.hd.clc.boya.db.entity.Payment">
+        UPDATE Payment
+        SET paySignId = #{paySignId}
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryByMapId" resultType="com.hd.clc.boya.db.entity.Payment">
+        select <include refid="Base_Column"/>
+        FROM Payment
+        WHERE selectionMapId = #{selectionMapId}
+        AND isDeleted = 0
+    </select>
+
+    <update id="updateout_trade_no" parameterType="com.hd.clc.boya.db.entity.Payment">
+        UPDATE Payment
+        SET out_trade_no = #{out_trade_no}
         WHERE id = #{id}
     </update>
 

@@ -1,6 +1,7 @@
 package com.hd.clc.boya.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hd.clc.boya.db.entity.PaySign;
 import com.hd.clc.boya.vo.AccessToken;
 import com.hd.clc.boya.vo.UserCode;
 import org.springframework.http.HttpEntity;
@@ -58,7 +59,7 @@ public class WxUtil {
      * @return
      * @throws Exception
      */
-    public static Map<String, Object> getWxPaySign(String openid, Integer out_trade_no, Integer total_fee, HttpServletRequest request) throws Exception {
+    public static Map<String, String> getWxPaySign(String openid, String out_trade_no, Integer total_fee, HttpServletRequest request) throws Exception {
         //随机字符串
         String nonce_str = StringUtil.getRandomStringByLength(32);
         //商品名称
@@ -71,7 +72,7 @@ public class WxUtil {
         packageParams.put("mch_id", mch_id);
         packageParams.put("nonce_str", nonce_str);
         packageParams.put("body", body);
-        packageParams.put("out_trade_no", out_trade_no.toString());
+        packageParams.put("out_trade_no", out_trade_no);
         packageParams.put("total_fee", total_fee.toString());
         packageParams.put("spbill_create_ip", spbill_create_ip);
         packageParams.put("notify_url", BaseVar.WX_PAY_NOTIFY_URL);
@@ -88,7 +89,7 @@ public class WxUtil {
                 + "<nonce_str>" + nonce_str + "</nonce_str>"
                 + "<notify_url>" + BaseVar.WX_PAY_NOTIFY_URL + "</notify_url>"
                 + "<openid>" + openid + "</openid>"
-                + "<out_trade_no>" + out_trade_no.toString() + "</out_trade_no>"
+                + "<out_trade_no>" + out_trade_no + "</out_trade_no>"
                 + "<spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>"
                 + "<total_fee>" + total_fee.toString() + "</total_fee>"
                 + "<trade_type>" + TRADETYPE + "</trade_type>"
@@ -101,7 +102,7 @@ public class WxUtil {
         //返回状态码
         String return_code = (String) map.get("return_code");
         //返回给小程序端需要的参数
-        Map<String, Object> sign = new HashMap<String, Object>();
+        Map<String, String> sign = new HashMap<String, String>();
         if("SUCCESS".equals(return_code)){
             //随机字符串
             sign.put("nonceStr", nonce_str);
@@ -127,6 +128,16 @@ public class WxUtil {
         } else {
             return null;
         }
+    }
+
+    public static Map<String, String> getWxPaySignByRecombination(PaySign paySign) {
+        Map<String, String> sign = new HashMap<String, String>();
+        sign.put("nonceStr", paySign.getNonceStr());
+        sign.put("package", paySign.getPrepay_id());
+        sign.put("timeStamp", paySign.getTimeStamp());
+        sign.put("paySign", paySign.getPaySign());
+        sign.put("appid", appid);
+        return sign;
     }
 
     /**

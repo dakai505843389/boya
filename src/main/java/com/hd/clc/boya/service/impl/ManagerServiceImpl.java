@@ -30,6 +30,9 @@ public class ManagerServiceImpl implements IManagerService {
     private HotClassMapper hotClassMapper;
 
     @Autowired
+    private TeacherMapper teacherMapper;
+
+    @Autowired
     private ClassServiceImpl classServiceImpl;
 
     @Autowired
@@ -89,7 +92,7 @@ public class ManagerServiceImpl implements IManagerService {
     }
 
     @Override
-    public ResultDetial addNewClassType(String typeName, HttpServletRequest request) {
+    public ResultDetial addNewClassType(String typeName, String imagePath, HttpServletRequest request) {
         Map<String, Object> data = new HashMap<>();
         String msg;
         if (verifySuperManager(request)) {
@@ -101,6 +104,7 @@ public class ManagerServiceImpl implements IManagerService {
             }
             ClassType classType = new ClassType();
             classType.setTypeName(typeName);
+            classType.setImagePath(imagePath);
             classType.setSortNum(sortNum);
             classType.setAddTime(new Date(System.currentTimeMillis()));
             if (classTypeMapper.addNewClassType(classType) < 1) {
@@ -168,6 +172,7 @@ public class ManagerServiceImpl implements IManagerService {
     public ResultDetial allowClass(Integer classId) {
         Map<String, Object> data = new HashMap<>();
         Class classObject = classMapper.queryById(classId);
+        Teacher teacher = teacherMapper.queryById(classObject.getBelongTeacherId());
         if (classObject != null){
             if (classObject.getStatus() == 0){
                 if (classMapper.updateStatus(classId, 2) < 1){
@@ -176,6 +181,12 @@ public class ManagerServiceImpl implements IManagerService {
                     int maxHotNum = hotClassMapper.getMaxSortNum();
                     HotClass hotClass = new HotClass();
                     hotClass.setClassId(classId);
+                    hotClass.setClassName(classObject.getClassName());
+                    hotClass.setClassRoom(classObject.getClassRoom());
+                    hotClass.setClassBeginTime(classObject.getClassBeginTime());
+                    hotClass.setIsAllowGroup(classObject.getIsAllowGroup());
+                    hotClass.setClassImagePath(classObject.getClassImagePath());
+                    hotClass.setTeacherType(teacher.getTeacherType());
                     hotClass.setSortNum(maxHotNum + 1);
                     hotClass.setAddTime(new Date(System.currentTimeMillis()));
                     if (hotClassMapper.addNewHotClass(hotClass) < 1){

@@ -3,7 +3,8 @@
 <mapper namespace="com.hd.clc.boya.db.impl.TeacherMapper">
 
     <sql id="Base_Column">
-         id, userId, description, score, scoreTimes, fansNum, teacherType, status, addTime, updateTime
+         id, userId, imagePath, name, tel, description, specialize, experience, score, scoreTimes, fansNum,
+          teacherType, status, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.Teacher">
@@ -27,8 +28,8 @@
 
     <insert id="addNewTeacher" parameterType="com.hd.clc.boya.db.entity.Teacher" useGeneratedKeys="true" keyProperty="id" >
         INSERT INTO Teacher
-        (userId, description, teacherType, addTime)
-        VALUES (#{userId}, #{description}, #{teacherType}, #{addTime})
+        (userId, imagePath, name, tel, description, specialize, experience, teacherType, addTime)
+        VALUES (#{userId}, #{imagePath}, #{name}, #{tel}, #{description}, #{specialize}, #{experience}, #{teacherType}, #{addTime})
     </insert>
 
     <update id="changeStatus" parameterType="com.hd.clc.boya.db.entity.Teacher">

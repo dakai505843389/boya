@@ -74,13 +74,23 @@ public class UserController {
     @ApiOperation(value = "申请成为教师接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户id", required = true, dataType = "int", paramType = "form"),
+            @ApiImplicitParam(name = "imagePath", value = "图片路径", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "name", value = "称呼", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "tel", value = "手机号", required = true, dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "description", value = "介绍", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "specialize", value = "擅长领域", required = true, dataType = "String", paramType = "form"),
+            @ApiImplicitParam(name = "experience", value = "资历经验", required = true, dataType = "String", paramType = "form"),
             @ApiImplicitParam(name = "teacherType", value = "教师类型（0：达人；1：机构）", required = true, dataType = "int", paramType = "form")
     })
     public Result applyTeacher(@RequestParam Integer userId,
+                               @RequestParam String imagePath,
+                               @RequestParam String name,
+                               @RequestParam String tel,
                                @RequestParam String description,
+                               @RequestParam String specialize,
+                               @RequestParam String experience,
                                @RequestParam Integer teacherType){
-        return userService.applyTeacher(userId, description, teacherType);
+        return userService.applyTeacher(userId, imagePath, name, tel, description, specialize, experience, teacherType);
     }
 
 

@@ -7,6 +7,7 @@ import com.hd.clc.boya.common.WxUtil;
 import com.hd.clc.boya.task.impl.ClassBeginTask;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,19 @@ import java.util.*;
 @CrossOrigin(value = "*", maxAge = 3600)
 @RestController
 public class TestController {
+
+    @RequestMapping(value = "timeTest", method = RequestMethod.POST)
+    @ResponseBody
+    /*@ApiImplicitParams({
+            @ApiImplicitParam(name = "beginTime", value = "beginTime", required = true, dataType = "String", paramType = "form")
+    })
+    @ApiOperation(value = "时间格式测试")*/
+    public Result timeTest(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date time){
+        Map<String, Object> data = new HashMap<>();
+        data.put("time", time);
+        return new ResultDetial<>(data);
+    }
+
 
     @RequestMapping(value = "timerTest", method = RequestMethod.POST)
     @ResponseBody
@@ -39,7 +53,7 @@ public class TestController {
     @ResponseBody
     public Result test(@RequestParam String name, HttpServletRequest request){
         //String newName = name + new Date(System.currentTimeMillis());
-        String res = "ceshi测试 ";
+        String res = name.substring(0, name.indexOf("_"));
         return new Result(1, res);
     }
 
@@ -55,6 +69,18 @@ public class TestController {
         Map<String, Object> data = new HashMap<>();
         data.put("time", time);
         data.put("newTime", new Date(System.currentTimeMillis()));
+        int n = 541563;
+
+        // O(n²)
+        for(int i = 0; i < n; i++){
+            for (int j = 0; j < n; j++){
+            }
+        }
+
+        // O(2n) = O(n)
+        for(int i = 0; i < n; i++){}
+        for(int i = 0; i < n; i++){}
+
         return new ResultDetial<>("", data);
     }
 

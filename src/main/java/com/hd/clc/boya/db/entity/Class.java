@@ -12,6 +12,8 @@ public class Class {
     private Integer belongTeacherId;//课程所属教师ID
     private String className;//课程名
     private String description;//课程描述
+    private String teacherName;
+    private String teacherImagePath;
     private String classImagePath;//课程图片路径
     private String classRoom;//教室
     private Integer maxNumber;//人数上限

@@ -19,6 +19,7 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Autowired
     private TeacherMapper teacherMapper;
+
     @Autowired
     private UserMapper userMapper;
 
@@ -44,19 +45,13 @@ public class TeacherServiceImpl implements ITeacherService {
            return new ResultDetial<>(-1, "没有该教师！", data);
        }else{
            User user = userMapper.queryById(teacher.getUserId());
-           if(teacher.getStatus()==0 && user.getUserType()==0){
+           if(teacher.getStatus() == 0 && user.getUserType() == 2){
                user.setUserType(1);
                teacher.setStatus(1);
-               if(teacherMapper.changeStatus(teacher)<1){
-                   if(userMapper.updateUserType(user)<1){
-                       return new ResultDetial<>(-1, "修改失败！", data);
-                   }
-
-               }else{
-                   msg="教师审核成功";
-                   data.put("teacher",teacher);
-               }
-
+               teacherMapper.changeStatus(teacher);
+               userMapper.updateUserType(user);
+               msg="教师审核成功";
+               data.put("teacher",teacher);
            }
 
        }
@@ -91,5 +86,13 @@ public class TeacherServiceImpl implements ITeacherService {
 
         }
         return new ResultDetial<>(msg, data);
+    }
+
+    @Override
+    public ResultDetial getByUserId(int userId) {
+        Map<String, Object> data = new HashMap<>();
+        Teacher teacher = teacherMapper.queryByUserId(userId);
+        data.put("teacher", teacher);
+        return new ResultDetial("查询成功", data);
     }
 }
