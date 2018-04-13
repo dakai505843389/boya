@@ -160,9 +160,9 @@ public class ManagerServiceImpl implements IManagerService {
         List<Class> classList = classMapper.getAllowingClass();
         if (classList != null && classList.size() != 0){
             data.put("classList", classList);
-            return new ResultDetial("查询成功！", data);
+            return new ResultDetial<>("查询成功！", data);
         } else {
-            return new ResultDetial(-1, "查询失败！", data);
+            return new ResultDetial<>(-1, "不存在待审核课程！", data);
         }
 
     }
@@ -182,6 +182,7 @@ public class ManagerServiceImpl implements IManagerService {
                     HotClass hotClass = new HotClass();
                     hotClass.setClassId(classId);
                     hotClass.setClassName(classObject.getClassName());
+                    hotClass.setClassType(classObject.getClassTypeId());
                     hotClass.setClassRoom(classObject.getClassRoom());
                     hotClass.setClassBeginTime(classObject.getClassBeginTime());
                     hotClass.setIsAllowGroup(classObject.getIsAllowGroup());

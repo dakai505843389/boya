@@ -12,8 +12,8 @@ public class Payment {
     private Integer userId;
     private Integer teacherId;
     private Integer classId;
-    private Integer selectionMapId;
-    private Integer price;
+    private Integer selectionMapId;//订单id
+    private Integer price;//支付金额
     private String out_trade_no;//发送给微信服务器的订单号前缀
     private Integer paySignId;//签名ID
     private Integer status;//0：支付开启；1：支付完成；2：支付失败

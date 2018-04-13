@@ -85,7 +85,7 @@ public class ClassController {
         @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "form"),
         @ApiImplicitParam(name = "selectionMapId", value = "选课映射ID", required = true, dataType = "int", paramType = "form")
     })
-    @ApiOperation(value = "退课接口")
+    @ApiOperation(value = "退课接口（已完成）")
     public Result revokeClass(@RequestParam int userId, @RequestParam int selectionMapId){
         return classService.revokeClass(userId, selectionMapId);
     }
@@ -94,7 +94,7 @@ public class ClassController {
     @ResponseBody
     @ApiOperation(value = "确认上课接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "techerId", value = "教师id", required = true, dataType = "int", paramType = "form"),
+            @ApiImplicitParam(name = "teacherId", value = "教师id", required = true, dataType = "int", paramType = "form"),
             @ApiImplicitParam(name = "classId", value = "课程id", required = true, dataType = "int", paramType = "form"),
     })
     public Result beginClass(@RequestParam Integer teacherId,

@@ -31,7 +31,22 @@ public class TeacherEvaluationController {
             @ApiImplicitParam(name = "scoreTwo", value = "打分二", required = true, dataType = "int", paramType = "form"),
             @ApiImplicitParam(name = "scoreThree", value = "打分三", required = true, dataType = "int", paramType = "form")
     })
-    public Result evaluate(int userId, int mapId, String evalueationWord, int scoreOne, int scoreTwo, int scoreThree){
+    public Result evaluate(@RequestParam int userId,
+                           @RequestParam int mapId,
+                           @RequestParam(required = false) String evalueationWord,
+                           @RequestParam int scoreOne,
+                           @RequestParam int scoreTwo,
+                           @RequestParam int scoreThree){
         return teacherEvaluationService.evaluate(userId, mapId, evalueationWord, scoreOne, scoreTwo, scoreThree);
+    }
+
+    @RequestMapping(value = "/queryByTeacherId", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "查询评价接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "teacherId", value = "教师ID", required = true, dataType = "int", paramType = "form")
+    })
+    public Result queryByTeacherId(@RequestParam int teacherId){
+        return teacherEvaluationService.queryByTeacherId(teacherId);
     }
 }

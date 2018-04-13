@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.TeacherEvaluationMapper">
 
     <sql id="Base_Column">
-        id, mapId, belongClassId, belongTeacherId, evalueationWord, evalueationScoreForFirst, evalueationScoreForSecond, evalueationScoreForThird, addTime, updateTime
+        id, userName, mapId, belongClassId, belongTeacherId, evalueationWord, evalueationScoreForFirst, evalueationScoreForSecond, evalueationScoreForThird, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.TeacherEvaluation">
@@ -20,13 +20,22 @@
 
     <insert id="add" parameterType="com.hd.clc.boya.db.entity.TeacherEvaluation">
         INSERT INTO Teacher_Evaluation
-        (mapId, belongClassId, belongTeacherId,
+        (userName, mapId, belongClassId, belongTeacherId,
         <if test="evalueationWord != null">evalueationWord</if>
         evalueationScoreForFirst, evalueationScoreForSecond, evalueationScoreForThird, addTime
         )
-        VALUES (#{mapId}, #{belongClassId}, #{belongTeacherId},
+        VALUES (#{userName}, #{mapId}, #{belongClassId}, #{belongTeacherId},
         <if test="evalueationWord != null">#{evalueationWord}</if>
         #{evalueationScoreForFirst}, #{evalueationScoreForSecond}, #{evalueationScoreForThird}, #{addTime})
     </insert>
+
+    <select id="queryByTeacherId" resultType="com.hd.clc.boya.db.entity.TeacherEvaluation">
+        SELECT <include refid="Base_Column"/>
+        FROM Teacher_Evaluation
+        WHERE belongTeacherId = #{belongTeacherId}
+        AND isDeleted = 0
+        ORDER BY addTime DESC
+        limit 20
+    </select>
 
 </mapper>

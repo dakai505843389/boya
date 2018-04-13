@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ITeacherEvaluationService {
     Result evaluate(int userId, int mapId, String evalueationWord, int scoreOne, int scoreTwo, int scoreThree);
+    Result queryByTeacherId(int teacherId);
 }

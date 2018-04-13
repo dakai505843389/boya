@@ -15,7 +15,7 @@ public class Teacher {
     private String  description;//介绍
     private String specialize;//擅长领域
     private String experience;//资历经验
-    private Integer score;//总评分
+    private Double score;//总评分
     private Integer scoreTimes;//评价次数
     private Integer fansNum;//粉丝数
     private Integer teacherType;//教师类型（0：达人；1：机构）

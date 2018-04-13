@@ -18,4 +18,6 @@ public interface ClassMapper {
     int classBegin(@Param("id") int id);
     int shutClass(@Param("id") int id);
     int shutGroup(@Param("id") int id);
+    List<Class> queryFinishedClassByTeacherId(@Param("belongTeacherId") int belongTeacherId);
+    List<Class> queryOngoingClassByTeacherId(@Param("belongTeacherId") int belongTeacherId);
 }

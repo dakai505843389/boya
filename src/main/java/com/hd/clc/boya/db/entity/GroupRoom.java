@@ -9,6 +9,7 @@ import java.util.Date;
 @Getter
 public class GroupRoom {
     private Integer id;
+    private Integer organizerId;
     private Integer classId;//课程id
     private String wxacode;//小程序码地址
     private Integer countNum;//当前车内人数

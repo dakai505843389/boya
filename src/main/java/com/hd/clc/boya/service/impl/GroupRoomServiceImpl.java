@@ -4,9 +4,11 @@ import com.hd.clc.boya.common.Result;
 import com.hd.clc.boya.common.ResultDetial;
 import com.hd.clc.boya.db.entity.Class;
 import com.hd.clc.boya.db.entity.GroupRoom;
+import com.hd.clc.boya.db.entity.User;
 import com.hd.clc.boya.db.entity.UserSelectionClassMap;
 import com.hd.clc.boya.db.impl.ClassMapper;
 import com.hd.clc.boya.db.impl.GroupRoomMapper;
+import com.hd.clc.boya.db.impl.UserMapper;
 import com.hd.clc.boya.db.impl.UserSelectionClassMapMapper;
 import com.hd.clc.boya.service.IGroupRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class GroupRoomServiceImpl implements IGroupRoomService {
@@ -29,6 +29,9 @@ public class GroupRoomServiceImpl implements IGroupRoomService {
 
     @Autowired
     private UserSelectionClassMapMapper userSelectionClassMapMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -56,6 +59,7 @@ public class GroupRoomServiceImpl implements IGroupRoomService {
                                 groupRoomMapper.modifyStatusForFull(groupRoom.getId());
                             }
                             msg = "加入团购成功！";
+                            data.put("class", classObject);
                             data.put("userSelectionClassMap", userSelectionClassMap);
                             data.put("groupRoom", groupRoom);
                         }else {
@@ -71,8 +75,11 @@ public class GroupRoomServiceImpl implements IGroupRoomService {
                     msg = "当前团购已结束或人满！";
                 }
             } else {
+                UserSelectionClassMap userSelectionClassMap = userSelectionClassMapMapper.queryByUserIdAndClassId(userId, classId);
                 rollback = true;
                 msg = "用户已有此课程订单！";
+                data.put("class", classObject);
+                data.put("userSelectionClassMap", userSelectionClassMap);
             }
         } else {
             rollback = true;
@@ -84,5 +91,69 @@ public class GroupRoomServiceImpl implements IGroupRoomService {
         } else {
             return new ResultDetial<>(msg, data);
         }
+    }
+
+    @Override
+    public Result queryForAllGroupNumber(int userId, int classId) {
+        Map<String, Object> data = new HashMap<>();
+        String msg;
+        UserSelectionClassMap userSelectionClassMap = userSelectionClassMapMapper.queryByUserIdAndClassId(userId, classId);
+        if (userSelectionClassMap != null){
+            if(userSelectionClassMap.getIsGroup() == 1){
+                GroupRoom groupRoom = groupRoomMapper.queryById(userSelectionClassMap.getGroupRoomId());
+                List<UserSelectionClassMap> mapList = userSelectionClassMapMapper.queryListByGroup(groupRoom.getId());
+                List<User> userList = new ArrayList<>();
+                for (int i = 0; i < mapList.size(); i++){
+                    UserSelectionClassMap otherUserSelectionClassMap = mapList.get(i);
+                    User user = userMapper.queryById(otherUserSelectionClassMap.getUserId());
+                    userList.add(user);
+                }
+                data.put("groupRoom", groupRoom);
+                data.put("userList", userList);
+                msg = "查询成功";
+            }else {
+                msg = "用户非团购！";
+            }
+        }else {
+            msg = "无此订单";
+        }
+        return new ResultDetial<>(msg, data);
+    }
+
+    @Override
+    public Result getCode(int userId, int classId) {
+        Map<String, Object> data = new HashMap<>();
+        String msg;
+        UserSelectionClassMap userSelectionClassMap = userSelectionClassMapMapper.queryByUserIdAndClassId(userId, classId);
+        if (userSelectionClassMap != null){
+            if(userSelectionClassMap.getIsGroup() == 1){
+                GroupRoom groupRoom = groupRoomMapper.queryById(userSelectionClassMap.getGroupRoomId());
+                data.put("code", groupRoom.getWxacode());
+                msg = "查询成功";
+            }else {
+                msg = "用户非团购！";
+            }
+        }else {
+            msg = "无此订单";
+        }
+        return new ResultDetial<>(msg, data);
+    }
+
+    @Override
+    public Result query(int groupRoomId) {
+        Map<String, Object> data = new HashMap<>();
+        String msg;
+        GroupRoom groupRoom = groupRoomMapper.queryById(groupRoomId);
+        List<UserSelectionClassMap> mapList = userSelectionClassMapMapper.queryListByGroup(groupRoom.getId());
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < mapList.size(); i++){
+            UserSelectionClassMap otherUserSelectionClassMap = mapList.get(i);
+            User user = userMapper.queryById(otherUserSelectionClassMap.getUserId());
+            userList.add(user);
+        }
+        data.put("groupRoom", groupRoom);
+        data.put("userList", userList);
+        msg = "查询成功";
+        return new ResultDetial<>(msg, data);
     }
 }

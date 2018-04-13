@@ -86,4 +86,20 @@
         AND isDeleted = 0
     </update>
 
+    <select id="queryFinishedClassByTeacherId" resultType="com.hd.clc.boya.db.entity.Class">
+        SELECT <include refid="Base_Column"/>
+        FROM Class
+        WHERE belongTeacherId = #{belongTeacherId}
+        AND status >= 4
+        AND isDeleted = 0
+    </select>
+
+    <select id="queryOngoingClassByTeacherId" resultType="com.hd.clc.boya.db.entity.Class">
+        SELECT <include refid="Base_Column"/>
+        FROM Class
+        WHERE belongTeacherId = #{belongTeacherId}
+        AND status &lt;= 3
+        AND isDeleted = 0
+    </select>
+
 </mapper>

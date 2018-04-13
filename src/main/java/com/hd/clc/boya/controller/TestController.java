@@ -89,7 +89,7 @@ public class TestController {
     public Result getWXACode(@RequestParam String sceneStr, @RequestParam int t) throws Exception{
         Map<String, Object> data = new HashMap<>();
         //data.put("wxacode", WxUtil.getminiqrQr(sceneStr, BaseVar.USER_GROUP_WXACODE_PATH + new Date(System.currentTimeMillis())));
-        data.put("wxacode", WxUtil.getminiqrQr(sceneStr, "pages/index/index", "C:/Users/Administrator/Desktop/1.png"));
+        data.put("wxacode", WxUtil.getminiqrQr(sceneStr, "pages/index/index", "Z:/idea/workspace/boya/target/boya/upload/1.png"));
         return new ResultDetial<>("", data);
     }
 }

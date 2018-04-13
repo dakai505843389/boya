@@ -122,17 +122,18 @@ public class PaymentServiceImpl implements IPaymentService {
                         rollback = true;
                     }
                 }else {
-                    if (oldPayment.getStatus() == 0) {
+                    /*if (oldPayment.getStatus() == 0) {
                         int paySignId = oldPayment.getPaySignId();
                         PaySign paySign = paySignMapper.query(paySignId);
                         Map<String, String> sign = WxUtil.getWxPaySignByRecombination(paySign);
                         data.put("sign", sign);
                         data.put("payment", oldPayment);
                         msg = "订单已存在，请支付！";
-                    }else if (oldPayment.getStatus() == 1){
+                    }else */
+                    if (oldPayment.getStatus() == 1){
                         data.put("paymentId", oldPayment.getId());
                         msg = "订单已支付！";
-                    }else if (oldPayment.getStatus() == 2){
+                    }else if (oldPayment.getStatus() == 2 || oldPayment.getStatus() == 0){
                         oldPayment.setOut_trade_no(System.currentTimeMillis() + StringUtil.getRandomStringByLength(10));
                         try {
                             Map<String, String> sign = WxUtil.getWxPaySign(user.getOpenid(), oldPayment.getOut_trade_no() + "_" + oldPayment.getId(), oldPayment.getPrice(), request);
@@ -141,6 +142,7 @@ public class PaymentServiceImpl implements IPaymentService {
                             paySign.setPrepay_id(sign.get("package"));
                             paySign.setTimeStamp(sign.get("timeStamp"));
                             paySign.setPaySign("paySign");
+                            paySign.setAddTime(new Date(System.currentTimeMillis()));
                             // 记录签名值
                             paySignMapper.add(paySign);
                             // 更新订单表中的签名id

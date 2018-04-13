@@ -11,6 +11,7 @@ public class HotClass {
     private Integer id;//数据库主键
     private Integer classId;//课程id
     private String className;
+    private Integer classType;
     private String classRoom;
     private Date classBeginTime;
     private Integer isAllowGroup;//是否允许团购（0：不允许；1：允许；2：团购截止）

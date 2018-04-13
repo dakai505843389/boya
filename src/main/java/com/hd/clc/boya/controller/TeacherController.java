@@ -28,8 +28,29 @@ public class TeacherController {
             @ApiImplicitParam(name = "userId", value = "用户表ID", required = true, dataType = "int", paramType = "form")
     })
     @ApiOperation(value = "获取教师信息")
-    public Result getByUserId(Integer userId){
+    public Result getByUserId(@RequestParam Integer userId){
         return teacherService.getByUserId(userId);
+    }
+
+
+    @RequestMapping(value = "queryFinishedClassByTeacherId", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "通过教师ID查询已结束课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "teacherId", value = "教师ID", required = true, dataType = "int", paramType = "form")
+    })
+    public Result queryFinishedClassByTeacherId(@RequestParam int teacherId){
+        return teacherService.queryFinishedClassByTeacherId(teacherId);
+    }
+
+    @RequestMapping(value = "queryOngoingClassByTeacherId", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "通过教师ID查询进行中课程")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "teacherId", value = "教师ID", required = true, dataType = "int", paramType = "form")
+    })
+    public Result queryOngoingClassByTeacherId(@RequestParam int teacherId){
+        return teacherService.queryOngoingClassByTeacherId(teacherId);
     }
 
 }

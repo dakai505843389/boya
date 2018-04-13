@@ -25,10 +25,12 @@
     </insert>
 
     <select id="getMaxSortNum" resultType="Integer">
-        SELECT sortNum
+        SELECT IFNULL(
+	      (SELECT sortNum
         FROM Class_Type
         ORDER BY sortNum DESC
-        LIMIT 1;
+        LIMIT 1)
+	      , 0)
     </select>
 
     <select id="list" resultType="com.hd.clc.boya.db.entity.ClassType">

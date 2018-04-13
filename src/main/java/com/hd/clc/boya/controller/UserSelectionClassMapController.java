@@ -30,4 +30,16 @@ public class UserSelectionClassMapController {
     public Result query(int userId, int classId){
         return userSelectionClassMapService.query(userId, classId);
     }
+
+    @RequestMapping(value = "queryList", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, dataType = "int", paramType = "form"),
+            @ApiImplicitParam(name = "isEnd", value = "是否已完成（0：未完成；1：已完成）", required = true, dataType = "int", paramType = "form")
+    })
+    @ApiOperation(value = "查询订单列表（选课映射）")
+    public Result queryList(int userId, int isEnd){
+        return userSelectionClassMapService.queryList(userId, isEnd);
+    }
+
 }

@@ -24,12 +24,12 @@
                 <if test="unionid != null">
                   unionid,
                 </if>
-          addTime, lastLoginTime)
+        imagePath,addTime, lastLoginTime)
         VALUES (#{openid},
                 <if test="unionid != null">
                     #{unionid}
                 </if>
-                #{addTime}, #{lastLoginTime})
+                #{imagePath}, #{addTime}, #{lastLoginTime})
     </insert>
 
     <update id="updateUserInformation" parameterType="com.hd.clc.boya.db.entity.User">

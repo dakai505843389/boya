@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.GroupRoomMapper">
 
     <sql id="Base_Column">
-        id, classId, wxacode, countNum, maxNum, paidNum, status, addTime, updateTime
+        id, organizerId, classId, wxacode, countNum, maxNum, paidNum, status, addTime, updateTime
     </sql>
 
     <select id="queryById" resultType="com.hd.clc.boya.db.entity.GroupRoom">
@@ -20,8 +20,8 @@
 
     <insert id="createNewGroup" parameterType="com.hd.clc.boya.db.entity.GroupRoom" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Group_Room
-        (classId, wxacode, countNum, maxNum)
-        VALUES (#{classId}, #{wxacode}, #{countNum}, #{maxNum})
+        (organizerId, classId, countNum, maxNum, addTime)
+        VALUES (#{organizerId}, #{classId}, #{countNum}, #{maxNum}, #{addTime})
     </insert>
 
     <update id="updateWxacode">
@@ -67,5 +67,11 @@
         AND ( status = 0 OR status = 1)
         AND isDeleted = 0
     </select>
+
+    <update id="updateCountNum" parameterType="com.hd.clc.boya.db.entity.GroupRoom">
+        UPDATE Group_Room
+        SET countNum = #{countNum}, #{paidNum} = #{paidNum}, status = #{status}, updateTime = #{updateTime}
+        WHERE id = #{id}
+    </update>
 
 </mapper>

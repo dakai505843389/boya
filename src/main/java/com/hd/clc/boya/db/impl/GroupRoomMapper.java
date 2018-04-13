@@ -19,4 +19,5 @@ public interface GroupRoomMapper {
     int modifyStatusForFull(@Param("id") Integer id);
     List<GroupRoom> getList(@Param("classId") int id);
     int modifyStatusForshut(@Param("id") Integer id);
+    int updateCountNum(GroupRoom groupRoom);
 }

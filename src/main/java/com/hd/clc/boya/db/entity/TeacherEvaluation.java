@@ -9,6 +9,7 @@ import java.util.Date;
 @Getter
 public class TeacherEvaluation {
     private Integer id;//数据库主键
+    private String userName;
     private Integer mapId;//选课映射表ID
     private Integer belongClassId;//所属课程ID
     private Integer belongTeacherId;//所属教师ID

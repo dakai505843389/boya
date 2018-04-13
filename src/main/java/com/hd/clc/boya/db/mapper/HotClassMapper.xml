@@ -3,7 +3,7 @@
 <mapper namespace="com.hd.clc.boya.db.impl.HotClassMapper">
 
     <sql id="Base_Column">
-        id, classId, className, classRoom, classBeginTime, isAllowGroup, classImagePath, teacherType,
+        id, classId, className, classType, classRoom, classBeginTime, isAllowGroup, classImagePath, teacherType,
          sortNum, isTop, topTime, addTime, updateTime, status
     </sql>
 
@@ -28,17 +28,19 @@
     </select>
 
     <select id="getMaxSortNum" resultType="Integer">
-        SELECT sortNum
-        FROM Hot_Class
-        WHERE isDeleted = 0
-        ORDER BY sortNum DESC
-        LIMIT 1
+        SELECT IFNULL(
+	      (SELECT sortNum
+           FROM Hot_Class
+           WHERE isDeleted = 0
+           ORDER BY sortNum DESC
+           LIMIT 1)
+	      , 0)
     </select>
 
     <insert id="addNewHotClass" parameterType="com.hd.clc.boya.db.entity.HotClass" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Hot_Class
-        (classId, className, classRoom, classBeginTime, isAllowGroup, classImagePath, teacherType, sortNum, addTime)
-        VALUES (#{classId}, #{className}, #{classRoom}, #{classBeginTime}, #{isAllowGroup}, #{classImagePath}, #{teacherType}, #{sortNum}, #{addTime})
+        (classId, className, classType, classRoom, classBeginTime, isAllowGroup, classImagePath, teacherType, sortNum, addTime)
+        VALUES (#{classId}, #{className}, #{classType}, #{classRoom}, #{classBeginTime}, #{isAllowGroup}, #{classImagePath}, #{teacherType}, #{sortNum}, #{addTime})
     </insert>
 
     <update id="classBegin">

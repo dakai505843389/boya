@@ -63,6 +63,7 @@ public class UserServiceImpl implements IUserService {
             }
             user.setAddTime(new Date(System.currentTimeMillis()));
             user.setLastLoginTime(new Date(System.currentTimeMillis()));
+
             // 新建用户
             if (userMapper.addNewUser(user) < 1){
                 return new ResultDetial<>(-1, "新建用户失败！", data);

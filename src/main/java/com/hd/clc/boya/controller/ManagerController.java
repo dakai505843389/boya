@@ -85,6 +85,13 @@ public class ManagerController {
         return managerService.addNewClassType(typeName, imagePath, request);
     }
 
+    @RequestMapping(value = "/getAllowingTeacher", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "查询待审核教师接口")
+    public Result getAllowingTeacher(){
+        return teacherService.getAllowingTeacher();
+    }
+
     /**
      * 教师审核通过接口
      * @param teacherId

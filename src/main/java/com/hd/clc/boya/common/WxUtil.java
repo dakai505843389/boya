@@ -155,7 +155,7 @@ public class WxUtil {
             String url = WXACODE_URL + getAccess_token();
             Map<String,Object> param = new HashMap<>();
             param.put("scene", sceneStr);
-            param.put("path", wxPath);
+            param.put("page", wxPath);
             param.put("width", 430);
             param.put("auto_color", false);
             Map<String,Object> line_color = new HashMap<>();
